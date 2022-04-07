@@ -1,0 +1,49 @@
+#pragma once
+
+/*
+** RPI Game Architecture Engine
+**
+** Portions adapted from:
+** Viper Engine - Copyright (C) 2016 Velan Studios - All Rights Reserved
+**
+** This file is distributed under the MIT License. See LICENSE.txt.
+*/
+//#include "entity/ga_component.h"
+#include "ga_polygon.h"
+#include "framework/ga_frame_params.h"
+
+/*
+** Holds a binary space partition tree representing a 3D solid. 
+** Two solids can be combined using the union(), subtract(), and intersect() methods.
+*/
+class ga_csg
+{
+public:
+	ga_csg();
+	ga_csg(ga_csg& other);
+	ga_csg(std::vector<ga_polygon>& polys);
+	~ga_csg();
+
+	/* Drawing the CSG to the screen */
+	void assemble_drawcall(ga_static_drawcall& draw);
+
+	/* Retrieve a certain CSG objects polygons */
+	std::vector<ga_polygon> to_polygons();
+
+	ga_csg add(ga_csg& other);
+	//ga_csg subtract(ga_csg& other);
+	//ga_csg intersect(ga_csg& other);
+
+	ga_csg Cube(ga_vec3f& center = { 0,0,0 },
+				ga_vec3f& radius = { 1,1,1 });
+	//ga_csg Sphere();
+	//ga_csg Pyramid();
+
+
+private:
+	uint32_t make_vao();
+	GLsizei get_index_count();
+	uint32_t _vao;
+	uint32_t _vbos[4];
+	std::vector<ga_polygon> _polygons;
+};
