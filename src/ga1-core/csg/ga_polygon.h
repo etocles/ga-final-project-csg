@@ -10,19 +10,26 @@
 */
 
 #include "math/ga_vec3f.h"
+#include "ga_plane.h"
+#include "ga_vertex.h"
 
 #include <string>
 #include <vector>
 
 /*
-** A test component that generates an empty draw call.
+** A plane data structure for CSG
 */
 class ga_polygon
 {
 public:
-	ga_polygon(class ga_entity* ent, const char* name);
+	ga_polygon();
+	ga_polygon(std::vector<ga_vertex>& verts, std::vector<ga_vec3f>& shared);
+	ga_polygon(ga_polygon& other);
+	void flip();
+	ga_polygon flipped();
 	~ga_polygon();
 
-	std::vector<ga_vec3f> _vertices;
-	std::vector<ga_vec3f> _shared;
+	std::vector<ga_vertex> _vertices;
+	std::vector<ga_vec3f> _shared; //TODO: What structure is this a vector of...
+	ga_plane _plane;
 };

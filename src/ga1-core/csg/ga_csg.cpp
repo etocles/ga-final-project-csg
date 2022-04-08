@@ -31,6 +31,7 @@ void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
 
 
 ga_csg Cube(ga_vec3f& radius) {
+    // TODO: Complete implementation
     std::vector<ga_polygon> polys;
     ga_vec3f center = ga_vec3f::zero_vector();
     //int arr[][][] = { {{0, 4, 6, 2},{-1, 0, 0}},

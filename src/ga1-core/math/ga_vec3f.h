@@ -44,3 +44,12 @@ inline ga_vec3f ga_vec3f_cross(const ga_vec3f& __restrict a, const ga_vec3f& __r
 	result.z = (a.x * b.y) - (a.y * b.x);
 	return result;
 }
+
+inline ga_vec3f ga_vec3f_lerp(const ga_vec3f& __restrict a, const ga_vec3f& __restrict b, const float &t)
+{
+	ga_vec3f result;
+	result.x = a.x * (1 - t) + b.x * t;
+	result.y = a.y * (1 - t) + b.y * t;
+	result.z = a.z * (1 - t) + b.z * t;
+	return result;
+}
