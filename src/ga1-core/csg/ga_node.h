@@ -29,8 +29,8 @@ public:
 	void invert();
 	ga_node inverted();
 
-	void clip_polygons(std::vector<ga_polygon>& polys);
 	void clip_to(ga_node& bsp);
+	std::vector<ga_polygon> clip_polygons(std::vector<ga_polygon>& polys);
 	std::vector<ga_polygon> all_polygons();
 
 	void build(std::vector<ga_polygon>& polys);
