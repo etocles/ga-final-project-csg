@@ -24,13 +24,16 @@ class ga_polygon
 {
 public:
 	ga_polygon();
+	ga_polygon(std::vector<ga_vertex>& verts);
 	ga_polygon(std::vector<ga_vertex>& verts, std::vector<ga_vec3f>& shared);
 	ga_polygon(ga_polygon& other);
 	void flip();
 	ga_polygon flipped();
 	~ga_polygon();
 
+	bool isTri() { return _vertices.size() == 3; };
+
 	std::vector<ga_vertex> _vertices;
-	std::vector<ga_vec3f> _shared; //TODO: What structure is this a vector of...
+	std::vector<ga_vec3f> _shared; //TODO: What structure is this a std::vector of...
 	ga_plane _plane;
 };

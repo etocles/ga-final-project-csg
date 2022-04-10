@@ -36,8 +36,8 @@ public:
 	//ga_csg subtract(ga_csg& other);
 	//ga_csg intersect(ga_csg& other);
 
-	ga_csg Cube(ga_vec3f& center = { 0,0,0 },
-				ga_vec3f& radius = { 1,1,1 });
+	ga_csg Cube(ga_vec3f& radius = { 1,1,1 },
+				ga_vec3f& center = { 0,0,0 });
 	//ga_csg Sphere();
 	//ga_csg Pyramid();
 

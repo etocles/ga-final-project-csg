@@ -15,6 +15,12 @@ ga_vertex::ga_vertex()
 	_normal = ga_vec3f::zero_vector();
 }
 
+ga_vertex::ga_vertex(ga_vec3f& p, ga_vec3f& n)
+{
+	_pos = p;
+	_normal = n;
+}
+
 ga_vertex::ga_vertex(ga_vertex& other)
 {
 	_pos = other._pos;

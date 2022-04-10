@@ -13,6 +13,10 @@
 ga_polygon::ga_polygon()
 {
 }
+ga_polygon::ga_polygon(std::vector<ga_vertex>& verts)
+{
+	_vertices = verts;
+}
 ga_polygon::~ga_polygon()
 {
 }
