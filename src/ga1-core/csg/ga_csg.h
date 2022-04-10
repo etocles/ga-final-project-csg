@@ -14,8 +14,9 @@
 #include "framework/ga_frame_params.h"
 
 /*
-** Holds a binary space partition tree representing a 3D solid. 
-** Two solids can be combined using the union(), subtract(), and intersect() methods.
+** The main architecture for CSG.
+** Also implements assemble_drawcall() which is used
+** to draw things to the screen with OpenGL using VAOs and VBOs
 */
 class ga_csg
 {

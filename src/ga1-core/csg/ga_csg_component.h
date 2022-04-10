@@ -17,7 +17,8 @@
 #include <cstdint>
 
 /*
-** Renderable basic textured cubed.
+** A component that attaches to the viper engine in order to provide
+** CSG functionality
 */
 class ga_csg_component :public ga_component
 {

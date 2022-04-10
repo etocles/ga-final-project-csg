@@ -18,7 +18,7 @@
 #include <vector>
 
 /*
-** A plane data structure for CSG
+** A polygon data structure for CSG
 */
 class ga_polygon
 {
