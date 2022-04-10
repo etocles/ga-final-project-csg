@@ -382,3 +382,15 @@ build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/ca03d4a59a40b68e/GA_COMPONENT.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/f5caed4125ec2913/GA_POLYGON.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/21b2e6bfaf5bb277/GA_VERTEX.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/c7359cf4102a02aa/GA_VERTEX.ipch
+build/ga-win64/.vs/cmake.db
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/1d582f2b37045d15/GA_INTERSECTION.TESTS.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/469fc637e9f40729/GA_CAMERA.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/7ce6adeda889d163/GA_PLAYERMOVE_COMPONENT.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/8be4df0c91b50ba3/GA_LUA_COMPONENT.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/b26bee83d9027b79/GA_ANIMATION_COMPONENT.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/bacc1eefd54a8d45/GA_PHYSICS_WORLD.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/c0cd93400ba8e442/GA_EGG_PARSER.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/c540d0b9ea3d2ba1/GA_MAT3F.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/dbdca9487dfd3d67/GA_RIGID_BODY.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/f3125f9b9a6fa81d/GA_WIDGET.ipch
+build/ga-win64/ga.dir/Debug/ga_vertex.obj

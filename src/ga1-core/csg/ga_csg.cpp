@@ -14,21 +14,6 @@
 #include "math/ga_vec4f.h"
 #include <vector>
 
-ga_csg::~ga_csg() {
-    glDeleteVertexArrays(1, (GLuint*)&_vao);
-    glDeleteBuffers(4, _vbos);
-}
-ga_csg::ga_csg(ga_csg& other) {
-	_polygons = other._polygons;
-}
-ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
-	_polygons = polys;
-}
-
-std::vector<ga_polygon> ga_csg::to_polygons() {
-	return _polygons;
-}
-
 // Return a new CSG solid representing space in either this solid or in the
   // solid `csg`. Neither this solid nor the solid `csg` are modified.
   // 
@@ -58,7 +43,39 @@ ga_csg ga_csg::add(ga_csg& other)
 
 uint32_t ga_csg::make_vao()
 {
-    return uint32_t();
+    glGenVertexArrays(1, &_vao);
+    glBindVertexArray(_vao);
+
+    glGenBuffers(4, _vbos);
+
+    std::vector<ga_vec3f> verts;
+    std::vector<ga_vec3f> normals;
+    std::vector<ga_vec3f> color;
+    std::vector<int> indices;
+    for (int i = 0; i < _polygons.size(); i++) {
+        _polygons[i].get_vbo_info(verts, normals, indices, color, _color);
+    }
+
+    // TODO: Make sure shader aligns with this
+    glBindBuffer(GL_ARRAY_BUFFER, _vbos[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, _vbos[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, _vbos[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(color), color.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(2);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbos[3]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
+
+    glBindVertexArray(0);
 }
 
 GLsizei ga_csg::get_index_count()
@@ -71,14 +88,12 @@ void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
     draw._index_count = get_index_count();
 }
 
-
 struct ConstructInfo {
 public:
     ga_vec4f ind;
     ga_vec3f norm;
 };
 ga_csg ga_csg::Cube(ga_vec3f& radius, ga_vec3f& center) {
-    // TODO: Complete implementation
     ga_vec3f center = ga_vec3f::zero_vector();
     // what the csg will be made with
     std::vector<ga_polygon> polys;

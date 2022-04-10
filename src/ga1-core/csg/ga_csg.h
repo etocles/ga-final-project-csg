@@ -22,15 +22,18 @@ class ga_csg
 {
 public:
 	ga_csg();
-	ga_csg(ga_csg& other);
-	ga_csg(std::vector<ga_polygon>& polys);
-	~ga_csg();
+	ga_csg(ga_csg& other) { _polygons = other._polygons; };
+	ga_csg(std::vector<ga_polygon>& polys) { _polygons = polys; };
+	~ga_csg() {
+		glDeleteVertexArrays(1, (GLuint*)&_vao);
+		glDeleteBuffers(4, _vbos);
+	};
 
 	/* Drawing the CSG to the screen */
 	void assemble_drawcall(ga_static_drawcall& draw);
 
 	/* Retrieve a certain CSG objects polygons */
-	std::vector<ga_polygon> to_polygons();
+	std::vector<ga_polygon> to_polygons() { return _polygons; };
 
 	ga_csg add(ga_csg& other);
 	//ga_csg subtract(ga_csg& other);
@@ -41,11 +44,14 @@ public:
 	//ga_csg Sphere();
 	//ga_csg Pyramid();
 
+	void set_color(ga_vec3f& col) { _color = col; };
+
 
 private:
 	uint32_t make_vao();
 	GLsizei get_index_count();
 	uint32_t _vao;
 	uint32_t _vbos[4];
+	ga_vec3f _color;
 	std::vector<ga_polygon> _polygons;
 };

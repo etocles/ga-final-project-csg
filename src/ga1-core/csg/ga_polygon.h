@@ -31,7 +31,14 @@ public:
 	ga_polygon flipped();
 	~ga_polygon();
 
+	void get_vbo_info(std::vector<ga_vec3f>& verts,
+					  std::vector<ga_vec3f>& normals,
+					  std::vector<int>& indices,
+					  std::vector<ga_vec3f>& colors,
+					  const ga_vec3f col);
+
 	bool isTri() { return _vertices.size() == 3; };
+	bool isQuad() { return _vertices.size() == 4; };
 
 	std::vector<ga_vertex> _vertices;
 	std::vector<ga_vec3f> _shared; //TODO: What structure is this a std::vector of...

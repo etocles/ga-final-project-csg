@@ -27,7 +27,7 @@ ga_lua_component::ga_lua_component(ga_entity* ent, const char* path) : ga_compon
 	std::string fullpath = g_root_path;
 	fullpath += path;
 
-	int status = luaL_loadfile(_lua, fullpath.c_str());
+	int status = luaL_dofile(_lua, fullpath.c_str());
 	if (status)
 	{
 		std::cerr << "Failed to load script " << path << ": " << lua_tostring(_lua, -1);
