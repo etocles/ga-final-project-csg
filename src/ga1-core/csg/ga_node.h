@@ -10,7 +10,7 @@
 ** This file is distributed under the MIT License. See LICENSE.txt.
 */
 
-#include "ga_plane.h"
+#include "ga_polygon.h"
 
 /*
 Holds a node in a BSP tree. A BSP tree is built from a collection of polygons

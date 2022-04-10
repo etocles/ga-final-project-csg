@@ -1,4 +1,6 @@
 #pragma once
+#ifndef GA_POLYGON_H
+#define GA_POLYGON_H
 
 /*
 ** RPI Game Architecture Engine
@@ -44,3 +46,12 @@ public:
 	std::vector<ga_vec3f> _shared; //TODO: What structure is this a std::vector of...
 	ga_plane _plane;
 };
+
+void split_polygon(ga_plane& plane,
+					ga_polygon& polygon,
+					std::vector<ga_polygon>& coplanar_front,
+					std::vector<ga_polygon>& coplanar_back,
+					std::vector<ga_polygon>& front,
+					std::vector<ga_polygon>& back);
+
+#endif

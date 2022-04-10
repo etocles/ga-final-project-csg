@@ -398,3 +398,4 @@ build/ga-win64/ga.dir/Debug/ga_csg.obj
 build/ga-win64/ga.dir/Debug/ga_csg_component.obj
 build/ga-win64/ga.dir/Debug/ga_node.obj
 build/ga-win64/ga.dir/Debug/ga_polygon.obj
+build/ga-win64/ga.dir/Debug/ga_plane.obj

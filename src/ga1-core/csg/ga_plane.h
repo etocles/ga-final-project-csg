@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef GA_PLANE_H
+#define GA_PLANE_H
+
 /*
 ** RPI Game Architecture Engine
 **
@@ -11,7 +14,6 @@
 */
 
 #include "math/ga_vec3f.h"
-#include "ga_polygon.h"
 
 /*
 ** A plane data structure for CSG
@@ -26,17 +28,13 @@ public:
 
 	void flip();
 	ga_plane flipped();
-	void splitPolygon(ga_polygon& polygon,
-					std::vector<ga_polygon> &coplanar_front, 
-					std::vector<ga_polygon> &coplanar_back, 
-					std::vector<ga_polygon> &front, 
-					std::vector<ga_polygon> &back);
 
 	const float EPSILON = .00001f;
 
 	ga_plane operator=(ga_plane& other);
 
-private:
 	ga_vec3f _normal;
 	float _w;
 };
+
+#endif
