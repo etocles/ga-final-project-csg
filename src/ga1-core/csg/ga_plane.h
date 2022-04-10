@@ -33,6 +33,8 @@ public:
 
 	const float EPSILON = .00001f;
 
+	ga_plane operator=(ga_plane& other);
+
 private:
 	ga_vec3f _normal;
 	float _w;

@@ -97,3 +97,8 @@ void ga_plane::splitPolygon(ga_polygon& polygon,
             break;
     }
 }
+
+ga_plane ga_plane::operator=(ga_plane& other)
+{
+    return ga_plane(other);
+}
