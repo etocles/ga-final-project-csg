@@ -5,6 +5,7 @@
 **
 ** Portions adapted from:
 ** Viper Engine - Copyright (C) 2016 Velan Studios - All Rights Reserved
+** Evan Wallace - CSG.js - https://github.com/evanw/csg.js
 **
 ** This file is distributed under the MIT License. See LICENSE.txt.
 */
