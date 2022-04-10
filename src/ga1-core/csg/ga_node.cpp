@@ -91,12 +91,12 @@ std::vector<ga_polygon> ga_node::all_polygons()
 
 void ga_node::build(std::vector<ga_polygon>& polys)
 {
-	if (_polygons.size() == 0) return;
-	if (!_plane) _plane = new ga_plane(_polygons[0]._plane);
+	if (polys.size() == 0) return;
+	if (!_plane) _plane = new ga_plane(*polys[0]._plane);
 	std::vector<ga_polygon> front;
 	std::vector<ga_polygon> back;
 	for (int i = 0; i < _polygons.size(); i++) {
-		_plane->splitPolygon(_polygons[i], _polygons, _polygons, front, back);
+		_plane->splitPolygon(polys[i], _polygons, _polygons, front, back);
 	}
 	if (front.size() != 0) {
 		if (!_front) _front = new ga_node();

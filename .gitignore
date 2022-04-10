@@ -394,3 +394,7 @@ build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/c540d0b9ea3d2ba1/GA_MAT3F.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/dbdca9487dfd3d67/GA_RIGID_BODY.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/f3125f9b9a6fa81d/GA_WIDGET.ipch
 build/ga-win64/ga.dir/Debug/ga_vertex.obj
+build/ga-win64/ga.dir/Debug/ga_csg.obj
+build/ga-win64/ga.dir/Debug/ga_csg_component.obj
+build/ga-win64/ga.dir/Debug/ga_node.obj
+build/ga-win64/ga.dir/Debug/ga_polygon.obj

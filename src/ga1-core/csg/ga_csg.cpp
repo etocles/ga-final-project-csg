@@ -76,6 +76,8 @@ uint32_t ga_csg::make_vao()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
+
+    return _vao;
 }
 
 GLsizei ga_csg::get_index_count()
@@ -93,8 +95,8 @@ public:
     ga_vec4f ind;
     ga_vec3f norm;
 };
-ga_csg ga_csg::Cube(ga_vec3f& radius, ga_vec3f& center) {
-    ga_vec3f center = ga_vec3f::zero_vector();
+ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
+    center = ga_vec3f::zero_vector();
     // what the csg will be made with
     std::vector<ga_polygon> polys;
     // hard coded data for a cube
