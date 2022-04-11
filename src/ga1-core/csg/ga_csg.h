@@ -1,4 +1,7 @@
-#pragma once
+
+
+#ifndef GA_CSG_H
+#define GA_CSG_H
 
 /*
 ** RPI Game Architecture Engine
@@ -10,7 +13,7 @@
 ** This file is distributed under the MIT License. See LICENSE.txt.
 */
 //#include "entity/ga_component.h"
-#include "ga_polygon.h"
+#include "ga_csg_polygon.h"
 #include "framework/ga_frame_params.h"
 
 /*
@@ -21,7 +24,10 @@
 class ga_csg
 {
 public:
-	ga_csg();
+	ga_csg()
+	{
+		Cube();
+	}
 	ga_csg(ga_csg& other) { _polygons = other._polygons; };
 	ga_csg(std::vector<ga_polygon>& polys) { _polygons = polys; };
 	~ga_csg() {
@@ -55,3 +61,5 @@ private:
 	ga_vec3f _color;
 	std::vector<ga_polygon> _polygons;
 };
+
+#endif

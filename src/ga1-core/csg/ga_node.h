@@ -1,5 +1,8 @@
-#pragma once
 
+
+
+#ifndef GA_NODE_H
+#define GA_NODE_H
 /*
 ** RPI Game Architecture Engine
 **
@@ -10,7 +13,7 @@
 ** This file is distributed under the MIT License. See LICENSE.txt.
 */
 
-#include "ga_polygon.h"
+#include "ga_csg_polygon.h"
 
 /*
 Holds a node in a BSP tree. A BSP tree is built from a collection of polygons
@@ -22,10 +25,14 @@ no distinction between internal and leaf nodes.
 class ga_node
 {
 public:
-	ga_node();
+	ga_node() {
+		_plane = nullptr;
+		_front = nullptr;
+		_back = nullptr;
+	}
 	ga_node(ga_node& other);
 	ga_node(std::vector<ga_polygon>& polys);
-	~ga_node();
+	~ga_node() { }
 
 	void invert();
 	ga_node inverted();
@@ -36,8 +43,10 @@ public:
 
 	void build(std::vector<ga_polygon>& polys);
 
-	ga_plane* _plane;
+	ga_csg_plane* _plane;
 	ga_node* _front;
 	ga_node* _back;
 	std::vector<ga_polygon> _polygons;
 };
+
+#endif

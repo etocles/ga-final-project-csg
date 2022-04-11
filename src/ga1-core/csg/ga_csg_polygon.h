@@ -1,4 +1,4 @@
-#pragma once
+
 #ifndef GA_POLYGON_H
 #define GA_POLYGON_H
 
@@ -14,7 +14,7 @@
 
 #include "math/ga_vec3f.h"
 #include "ga_plane.h"
-#include "ga_vertex.h"
+#include "ga_csg_vertex.h"
 
 #include <string>
 #include <vector>
@@ -26,9 +26,9 @@ class ga_polygon
 {
 public:
 	ga_polygon();
-	ga_polygon(std::vector<ga_vertex>& verts);
-	ga_polygon(std::vector<ga_vertex>& verts, std::vector<ga_vec3f>& shared);
-	ga_polygon(ga_polygon& other);
+	ga_polygon(std::vector<ga_csg_vertex>& verts);
+	ga_polygon(std::vector<ga_csg_vertex>& verts, std::vector<ga_vec3f>& shared);
+	ga_polygon(const ga_polygon& other);
 	void flip();
 	ga_polygon flipped();
 	~ga_polygon();
@@ -42,12 +42,12 @@ public:
 	bool isTri() { return _vertices.size() == 3; };
 	bool isQuad() { return _vertices.size() == 4; };
 
-	std::vector<ga_vertex> _vertices;
+	std::vector<ga_csg_vertex> _vertices;
 	std::vector<ga_vec3f> _shared; //TODO: What structure is this a std::vector of...
-	ga_plane _plane;
+	ga_csg_plane _plane;
 };
 
-void split_polygon(ga_plane& plane,
+void split_polygon(ga_csg_plane& plane,
 					ga_polygon& polygon,
 					std::vector<ga_polygon>& coplanar_front,
 					std::vector<ga_polygon>& coplanar_back,

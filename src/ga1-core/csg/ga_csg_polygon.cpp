@@ -8,13 +8,13 @@
 ** This file is distributed under the MIT License. See LICENSE.txt.
 */
 
-#include "ga_polygon.h"
+#include "ga_csg_polygon.h"
 #include <cassert>
 
 ga_polygon::ga_polygon()
 {
 }
-ga_polygon::ga_polygon(std::vector<ga_vertex>& verts)
+ga_polygon::ga_polygon(std::vector<ga_csg_vertex>& verts)
 {
 	_vertices = verts;
 }
@@ -53,14 +53,14 @@ void ga_polygon::get_vbo_info(std::vector<ga_vec3f>& verts,
 	}
 }
 
-ga_polygon::ga_polygon(std::vector<ga_vertex>& verts, std::vector<ga_vec3f>& shared)
+ga_polygon::ga_polygon(std::vector<ga_csg_vertex>& verts, std::vector<ga_vec3f>& shared)
 {
 	_vertices = verts;
 	_shared = shared;
-	_plane = ga_plane(verts[0]._pos, verts[0]._pos, verts[0]._pos);
+	_plane = ga_csg_plane(verts[0]._pos, verts[0]._pos, verts[0]._pos);
 }
 
-ga_polygon::ga_polygon(ga_polygon& other)
+ga_polygon::ga_polygon(const ga_polygon& other)
 {
 	_vertices = other._vertices;
 	_shared = other._shared;
@@ -83,7 +83,7 @@ ga_polygon ga_polygon::flipped()
 }
 
 
-void split_polygon(ga_plane& plane,
+void split_polygon(ga_csg_plane& plane,
 					ga_polygon& polygon,
 					std::vector<ga_polygon>& coplanar_front,
 					std::vector<ga_polygon>& coplanar_back,
@@ -118,21 +118,21 @@ void split_polygon(ga_plane& plane,
 		back.push_back(polygon);
 		break;
 	case SPANNING:
-		std::vector<ga_vertex> f;
-		std::vector<ga_vertex> b;
+		std::vector<ga_csg_vertex> f;
+		std::vector<ga_csg_vertex> b;
 		for (int i = 0; i < polygon._vertices.size(); i++) {
 			int j = (i + 1) % polygon._vertices.size();
 			int ti = types[i];
 			int tj = types[j];
-			ga_vertex vi = polygon._vertices[i];
-			ga_vertex vj = polygon._vertices[j];
+			ga_csg_vertex vi = polygon._vertices[i];
+			ga_csg_vertex vj = polygon._vertices[j];
 			if (ti != BACK) f.push_back(vi);
-			if (ti != FRONT) b.push_back(ti != BACK ? ga_vertex(vi) : vi);
+			if (ti != FRONT) b.push_back(ti != BACK ? ga_csg_vertex(vi) : vi);
 			if ((ti | tj) == SPANNING) {
 				float t = (plane._w - plane._normal.dot(vi._pos)) / plane._normal.dot(vj._pos - vi._pos);
-				ga_vertex v = vi.interpolate(vj, t);
+				ga_csg_vertex v = vi.interpolate(vj, t);
 				f.push_back(v);
-				b.push_back(ga_vertex(v));
+				b.push_back(ga_csg_vertex(v));
 			}
 		}
 		if (f.size() >= 3) front.push_back(ga_polygon(f, polygon._shared));

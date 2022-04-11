@@ -12,7 +12,7 @@
 
 ga_node::ga_node(ga_node& other)
 {
-	_plane = new ga_plane(*(other._plane));
+	_plane = new ga_csg_plane(*(other._plane));
 	_front = new ga_node(*(other._front));
 	_back = new ga_node(*(other._back));
 	for (int i = 0; i < other._polygons.size(); i++) {
@@ -47,7 +47,9 @@ void ga_node::invert()
 
 ga_node ga_node::inverted()
 {
-	return ga_node();
+	ga_node temp = ga_node(*this);
+	temp.invert();
+	return temp;
 }
 
 void ga_node::clip_to(ga_node& bsp)
@@ -92,7 +94,7 @@ std::vector<ga_polygon> ga_node::all_polygons()
 void ga_node::build(std::vector<ga_polygon>& polys)
 {
 	if (polys.size() == 0) return;
-	if (!_plane) _plane = new ga_plane(polys[0]._plane);
+	if (!_plane) _plane = new ga_csg_plane(polys[0]._plane);
 	std::vector<ga_polygon> front;
 	std::vector<ga_polygon> back;
 	for (int i = 0; i < _polygons.size(); i++) {
