@@ -108,13 +108,13 @@ ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
                     {{0, 2, 3, 1},{0, 0, -1}},
                     {{4, 5, 7, 6},{0, 0, +1}}};
     for (int i = 0; i < temp.size(); i++) {
-        std::vector<ga_vertex> vs;
+        std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < 4; j++) {
             ga_vec3f pos;
             pos.x = center.x + radius.axes[0] * (2 * !!((int)temp[i].ind.x & 1) - 1);
             pos.y = center.y + radius.axes[1] * (2 * !!((int)temp[i].ind.y & 2) - 1);
             pos.z = center.z + radius.axes[2] * (2 * !!((int)temp[i].ind.z & 4) - 1);
-            vs.push_back(ga_vertex(pos, temp[i].norm));
+            vs.push_back(ga_csg_vertex(pos, temp[i].norm));
         }
         polys.push_back(ga_polygon(vs));
     }

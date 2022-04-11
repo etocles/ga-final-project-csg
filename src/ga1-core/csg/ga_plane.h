@@ -1,7 +1,7 @@
-#pragma once
 
-#ifndef GA_PLANE_H
-#define GA_PLANE_H
+
+#ifndef GA_CSG_PLANE_H
+#define GA_CSG_PLANE_H
 
 /*
 ** RPI Game Architecture Engine
@@ -18,20 +18,20 @@
 /*
 ** A plane data structure for CSG
 */
-class ga_plane
+class ga_csg_plane
 {
 public:
-	ga_plane();
-	ga_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c);
-	ga_plane(const ga_plane& other);
-	~ga_plane();
+	ga_csg_plane();
+	ga_csg_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c);
+	ga_csg_plane(const ga_csg_plane& other);
+	~ga_csg_plane();
 
 	void flip();
-	ga_plane flipped();
+	ga_csg_plane flipped();
 
 	const float EPSILON = .00001f;
 
-	ga_plane operator=(const ga_plane& other);
+	ga_csg_plane operator=(const ga_csg_plane& other);
 
 	ga_vec3f _normal;
 	float _w;

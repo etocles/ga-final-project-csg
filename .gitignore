@@ -404,3 +404,7 @@ build/ga-win64/ga.dir/Debug/ga.tlog/link-rc.write.1.tlog
 build/ga-win64/ga.dir/Debug/ga.tlog/link-rc.read.1.tlog
 build/ga-win64/ga.dir/Debug/ga.tlog/link-cvtres.write.1.tlog
 build/ga-win64/ga.dir/Debug/ga.tlog/link-cvtres.read.1.tlog
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/256ea9f289d3de6b/GA_CSG_VERTEX.ipch
+build/ga-win64/ga.dir/Debug/ga_csg_vertex.obj
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/fdaed7ff7d8b14d7/GA_CSG_POLYGON.ipch
+build/ga-win64/ga.dir/Debug/ga_csg_polygon.obj

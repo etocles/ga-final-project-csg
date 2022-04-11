@@ -10,40 +10,40 @@
 
 #include "ga_plane.h"
 
-ga_plane::ga_plane()
+ga_csg_plane::ga_csg_plane()
 {
     _normal = ga_vec3f::zero_vector();
     _w = 0.0f;
 }
-ga_plane::~ga_plane()
+ga_csg_plane::~ga_csg_plane()
 {
 }
 
-ga_plane::ga_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c) {
+ga_csg_plane::ga_csg_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c) {
 	_normal = ga_vec3f_cross((b - a), (c - a)).normal();
 }
 
-ga_plane::ga_plane(const ga_plane& other)
+ga_csg_plane::ga_csg_plane(const ga_csg_plane& other)
 {
 	_normal = other._normal;
 	_w = other._w;
 }
 
-void ga_plane::flip()
+void ga_csg_plane::flip()
 {
 	_normal = -_normal;
 	_w = -_w;
 }
 
-ga_plane ga_plane::flipped()
+ga_csg_plane ga_csg_plane::flipped()
 {
-	ga_plane temp(*this);
+	ga_csg_plane temp(*this);
     temp.flip();
 	return temp;
 }
 
 
-ga_plane ga_plane::operator=(const ga_plane& other)
+ga_csg_plane ga_csg_plane::operator=(const ga_csg_plane& other)
 {
-    return ga_plane(other);
+    return ga_csg_plane(other);
 }
