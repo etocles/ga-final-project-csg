@@ -21,7 +21,7 @@ ga_vertex::ga_vertex(ga_vec3f& p, ga_vec3f& n)
 	_normal = n;
 }
 
-ga_vertex::ga_vertex(ga_vertex& other)
+ga_vertex::ga_vertex(const ga_vertex& other)
 {
 	_pos = other._pos;
 	_normal = other._normal;

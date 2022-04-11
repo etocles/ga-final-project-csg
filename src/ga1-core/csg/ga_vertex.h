@@ -23,7 +23,7 @@ class ga_vertex
 public:
 	ga_vertex();
 	ga_vertex(ga_vec3f& p, ga_vec3f& n);
-	ga_vertex(ga_vertex& other);
+	ga_vertex(const ga_vertex& other);
 	~ga_vertex();
 
 	void flip();

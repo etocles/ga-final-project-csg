@@ -23,7 +23,7 @@ class ga_plane
 public:
 	ga_plane();
 	ga_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c);
-	ga_plane(ga_plane& other);
+	ga_plane(const ga_plane& other);
 	~ga_plane();
 
 	void flip();
@@ -31,7 +31,7 @@ public:
 
 	const float EPSILON = .00001f;
 
-	ga_plane operator=(ga_plane& other);
+	ga_plane operator=(const ga_plane& other);
 
 	ga_vec3f _normal;
 	float _w;

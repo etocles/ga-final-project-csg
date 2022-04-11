@@ -399,3 +399,8 @@ build/ga-win64/ga.dir/Debug/ga_csg_component.obj
 build/ga-win64/ga.dir/Debug/ga_node.obj
 build/ga-win64/ga.dir/Debug/ga_polygon.obj
 build/ga-win64/ga.dir/Debug/ga_plane.obj
+build/ga-win64/ga.dir/Debug/ga.tlog/link.read.2.tlog
+build/ga-win64/ga.dir/Debug/ga.tlog/link-rc.write.1.tlog
+build/ga-win64/ga.dir/Debug/ga.tlog/link-rc.read.1.tlog
+build/ga-win64/ga.dir/Debug/ga.tlog/link-cvtres.write.1.tlog
+build/ga-win64/ga.dir/Debug/ga.tlog/link-cvtres.read.1.tlog

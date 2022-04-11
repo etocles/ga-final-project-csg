@@ -60,7 +60,7 @@ ga_polygon::ga_polygon(std::vector<ga_vertex>& verts, std::vector<ga_vec3f>& sha
 	_plane = ga_plane(verts[0]._pos, verts[0]._pos, verts[0]._pos);
 }
 
-ga_polygon::ga_polygon(ga_polygon& other)
+ga_polygon::ga_polygon(const ga_polygon& other)
 {
 	_vertices = other._vertices;
 	_shared = other._shared;

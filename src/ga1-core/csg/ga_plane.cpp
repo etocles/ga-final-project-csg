@@ -23,7 +23,7 @@ ga_plane::ga_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c) {
 	_normal = ga_vec3f_cross((b - a), (c - a)).normal();
 }
 
-ga_plane::ga_plane(ga_plane& other)
+ga_plane::ga_plane(const ga_plane& other)
 {
 	_normal = other._normal;
 	_w = other._w;
@@ -43,7 +43,7 @@ ga_plane ga_plane::flipped()
 }
 
 
-ga_plane ga_plane::operator=(ga_plane& other)
+ga_plane ga_plane::operator=(const ga_plane& other)
 {
     return ga_plane(other);
 }

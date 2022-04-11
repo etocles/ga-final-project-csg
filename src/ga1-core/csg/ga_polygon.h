@@ -28,7 +28,7 @@ public:
 	ga_polygon();
 	ga_polygon(std::vector<ga_vertex>& verts);
 	ga_polygon(std::vector<ga_vertex>& verts, std::vector<ga_vec3f>& shared);
-	ga_polygon(ga_polygon& other);
+	ga_polygon(const ga_polygon& other);
 	void flip();
 	ga_polygon flipped();
 	~ga_polygon();
