@@ -10,6 +10,7 @@
 
 #include "ga_csg_polygon.h"
 #include <cassert>
+#include <iostream>
 
 ga_polygon::ga_polygon()
 {
@@ -34,17 +35,19 @@ void ga_polygon::get_vbo_info(std::vector<ga_vec3f>& verts,
 			colors.push_back(col);
 			verts.push_back(_vertices[i]._pos);
 			normals.push_back(_vertices[i]._normal);
-			indices.push_back(start_index+i); // TODO: Potentially wrong order
+			indices.push_back(start_index+(2-i)); // TODO: Potentially wrong order
 		}
 	}
 	// split into two tris, add them
 	else if (isQuad()) {
 		int arr[] = { 0,1,2,0,2,3 };
-		for (int i : arr) {
-			colors.push_back(col);
+		for (int i = 0; i < 4; i++) {
 			verts.push_back(_vertices[i]._pos);
 			normals.push_back(_vertices[i]._normal);
-			indices.push_back(start_index + i); // TODO: Potentially wrong order
+			colors.push_back(col);
+		}
+		for (int i : arr) {
+			indices.push_back(start_index + (3-i)); // TODO: Potentially wrong order
 		}
 	}
 	// if n-gon, break program // TODO: Take out, extremely volatile.
