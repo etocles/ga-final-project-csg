@@ -27,13 +27,11 @@ class ga_csg
 public:
 	ga_csg()
 	{
-		Cube();
+		_polygons = Cube()._polygons;
 		_color = { 1.0f,1.0f,1.0f };
 		_material = new ga_csg_material();
 		_material->init();
-		glGenVertexArrays(1, &_vao);
-		glBindVertexArray(_vao);
-		glGenBuffers(4, _vbos);
+		_material->set_color(_color);
 		_vao = make_vao(_index_count);
 	}
 	ga_csg(ga_csg& other) { _polygons = other._polygons; };
@@ -70,6 +68,8 @@ private:
 	uint32_t _vbos[4];
 	ga_vec3f _color;
 	std::vector<ga_polygon> _polygons;
+
+	friend class ga_csg_component;
 };
 
 #endif
