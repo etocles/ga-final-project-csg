@@ -51,14 +51,18 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
         _polygons[i].get_vbo_info(verts, normals, indices, color, _color);
     }
 
+    glGenVertexArrays(1, &_vao);
+    glBindVertexArray(_vao);
+    glGenBuffers(4, _vbos);
+
     // TODO: Make sure shader aligns with this
     glBindBuffer(GL_ARRAY_BUFFER, _vbos[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, verts.size()*3*sizeof(float), verts.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, _vbos[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * 3 * sizeof(float), normals.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
@@ -93,25 +97,76 @@ public:
     ga_vec3f norm;
 };
 ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
-    center = ga_vec3f::zero_vector();
+    center = ga_vec3f::zero_vector(); // TODO: Remove
     // what the csg will be made with
     std::vector<ga_polygon> polys;
     // hard coded data for a cube
-    std::vector<ConstructInfo> temp = 
-                    {{{0, 4, 6, 2},{-1, 0, 0}},
-                    {{1, 3, 7, 5},{+1, 0, 0}},
-                    {{0, 1, 5, 4},{0, -1, 0}},
-                    {{2, 6, 7, 3},{0, +1, 0}},
-                    {{0, 2, 3, 1},{0, 0, -1}},
-                    {{4, 5, 7, 6},{0, 0, +1}}};
-    for (int i = 0; i < temp.size(); i++) {
+    //std::vector<ConstructInfo> temp = 
+    //                {{{0, 4, 6, 2},{-1, 0, 0}},
+    //                {{1, 3, 7, 5},{+1, 0, 0}},
+    //                {{0, 1, 5, 4},{0, -1, 0}},
+    //                {{2, 6, 7, 3},{0, +1, 0}},
+    //                {{0, 2, 3, 1},{0, 0, -1}},
+    //                {{4, 5, 7, 6},{0, 0, +1}}};
+
+    //for (int i = 0; i < temp.size(); i++) {
+    //    std::vector<ga_csg_vertex> vs;
+    //    for (int j = 0; j < 4; j++) {
+    //        ga_vec3f pos;
+    //        pos.x = center.x + radius.axes[0] * (2 * !!((int)temp[i].ind.x & 1) - 1);
+    //        pos.y = center.y + radius.axes[1] * (2 * !!((int)temp[i].ind.y & 2) - 1);
+    //        pos.z = center.z + radius.axes[2] * (2 * !!((int)temp[i].ind.z & 4) - 1);
+    //        vs.push_back(ga_csg_vertex(pos, temp[i].norm));
+    //    }
+    //    polys.push_back(ga_polygon(vs));
+    //}
+
+    std::vector<ga_vec3f> vertices = {
+        // Front
+        {-1.0, -1.0,  1.0},
+        { 1.0, -1.0,  1.0},
+        { 1.0,  1.0,  1.0},
+        {-1.0,  1.0,  1.0},
+        // Top
+        {-1.0,  1.0,  1.0},
+        { 1.0,  1.0,  1.0},
+        { 1.0,  1.0, -1.0},
+        {-1.0,  1.0, -1.0},
+        // Back
+        { 1.0, -1.0, -1.0},
+        {-1.0, -1.0, -1.0},
+        {-1.0,  1.0, -1.0},
+        { 1.0,  1.0, -1.0},
+         // Bottom
+        { -1.0, -1.0, -1.0},
+        {  1.0, -1.0, -1.0},
+        {  1.0, -1.0,  1.0},
+        { -1.0, -1.0,  1.0},
+         // Left
+        { -1.0, -1.0, -1.0},
+        { -1.0, -1.0,  1.0},
+        { -1.0,  1.0,  1.0},
+        { -1.0,  1.0, -1.0},
+         // Right
+        {  1.0, -1.0,  1.0},
+        {  1.0, -1.0, -1.0},
+        {  1.0,  1.0, -1.0},
+        {  1.0,  1.0,  1.0},
+    };
+
+    std::vector<ga_vec3f> norms = {
+        {0, 0, +1}, // Front
+        {0, -1, 0}, // Top
+        {0, 0, -1}, // Back
+        {0, -1, 0}, // Bottom
+        {-1, 0, 0}, // Left
+        {+1, 0, 0}  // Right
+    };
+
+    for (int i = 0; i < vertices.size(); i += 4) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < 4; j++) {
-            ga_vec3f pos;
-            pos.x = center.x + radius.axes[0] * (2 * !!((int)temp[i].ind.x & 1) - 1);
-            pos.y = center.y + radius.axes[1] * (2 * !!((int)temp[i].ind.y & 2) - 1);
-            pos.z = center.z + radius.axes[2] * (2 * !!((int)temp[i].ind.z & 4) - 1);
-            vs.push_back(ga_csg_vertex(pos, temp[i].norm));
+            vs.push_back(ga_csg_vertex(vertices[i+j], norms[i/4]));
         }
         polys.push_back(ga_polygon(vs));
     }
