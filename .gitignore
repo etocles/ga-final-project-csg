@@ -408,3 +408,7 @@ build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/256ea9f289d3de6b/GA_CSG_VERTEX.ipch
 build/ga-win64/ga.dir/Debug/ga_csg_vertex.obj
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/fdaed7ff7d8b14d7/GA_CSG_POLYGON.ipch
 build/ga-win64/ga.dir/Debug/ga_csg_polygon.obj
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/933bce0ccfe81a9a/GA_MATERIAL.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/cf2d9160e2de8a5e/GA_ENTITY.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/54ed27d1f68e840f/GA_PROGRAM.ipch
+build/ga-win64/ALWAYS_COPY_DATA.vcxproj.user

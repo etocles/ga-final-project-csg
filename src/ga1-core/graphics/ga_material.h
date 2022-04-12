@@ -94,3 +94,25 @@ private:
 
 	struct ga_skeleton* _skeleton;
 };
+
+/*
+** Simple untextured material with a constant color.
+*/
+class ga_csg_material : public ga_material
+{
+public:
+	ga_csg_material();
+	~ga_csg_material();
+
+	virtual bool init() override;
+
+	virtual void bind(const ga_mat4f& view_proj, const ga_mat4f& transform) override;
+
+	virtual void set_color(const ga_vec3f& color) override { _color = color; }
+
+private:
+	ga_shader* _vs;
+	ga_shader* _fs;
+	ga_program* _program;
+	ga_vec3f _color;
+};

@@ -27,6 +27,7 @@ public:
 	ga_csg()
 	{
 		Cube();
+		_color = { 1.0f,1.0f,1.0f };
 	}
 	ga_csg(ga_csg& other) { _polygons = other._polygons; };
 	ga_csg(std::vector<ga_polygon>& polys) { _polygons = polys; };
@@ -56,6 +57,7 @@ public:
 private:
 	uint32_t make_vao();
 	GLsizei get_index_count();
+	class ga_material* _material;
 	uint32_t _vao;
 	uint32_t _vbos[4];
 	ga_vec3f _color;
