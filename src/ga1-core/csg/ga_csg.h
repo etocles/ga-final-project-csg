@@ -15,6 +15,7 @@
 //#include "entity/ga_component.h"
 #include "ga_csg_polygon.h"
 #include "framework/ga_frame_params.h"
+#include "graphics/ga_material.h"
 
 /*
 ** The main architecture for CSG.
@@ -28,6 +29,12 @@ public:
 	{
 		Cube();
 		_color = { 1.0f,1.0f,1.0f };
+		_material = new ga_csg_material();
+		_material->init();
+		glGenVertexArrays(1, &_vao);
+		glBindVertexArray(_vao);
+		glGenBuffers(4, _vbos);
+		_vao = make_vao(_index_count);
 	}
 	ga_csg(ga_csg& other) { _polygons = other._polygons; };
 	ga_csg(std::vector<ga_polygon>& polys) { _polygons = polys; };
@@ -55,10 +62,11 @@ public:
 
 
 private:
-	uint32_t make_vao();
+	uint32_t make_vao(GLsizei& index_count);
 	GLsizei get_index_count();
 	class ga_material* _material;
 	uint32_t _vao;
+	GLsizei _index_count;
 	uint32_t _vbos[4];
 	ga_vec3f _color;
 	std::vector<ga_polygon> _polygons;

@@ -20,6 +20,8 @@
 #include "graphics/ga_cube_component.h"
 #include "graphics/ga_program.h"
 
+#include "csg/ga_csg_component.h"
+
 #include "gui/ga_font.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -63,6 +65,11 @@ int main(int argc, const char** argv)
 	ga_lua_component lua_move(&lua, "data/scripts/move.lua");
 	ga_cube_component lua_model(&lua, "data/textures/rpi.png");
 	sim->add_entity(&lua);
+
+	// Create a CSG entity
+	ga_entity csg_test_1;
+	ga_csg_component csg_comp(&csg_test_1);
+	sim->add_entity(&csg_test_1);
 
 	// Main loop:
 	while (true)

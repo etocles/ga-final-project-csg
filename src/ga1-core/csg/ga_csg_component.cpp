@@ -25,8 +25,6 @@ void ga_csg_component::update(ga_frame_params* params) {
     draw._name = "ga_csg_component";
     draw._transform = get_entity()->get_transform();
     draw._draw_mode = GL_TRIANGLES;
-    // TODO: Try to see if material is needed to be specified
-    // TODO: Shader?
     _csg->assemble_drawcall(draw);
 
     while (params->_static_drawcall_lock.test_and_set(std::memory_order_acquire)) {}

@@ -412,3 +412,6 @@ build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/933bce0ccfe81a9a/GA_MATERIAL.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/cf2d9160e2de8a5e/GA_ENTITY.ipch
 build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/54ed27d1f68e840f/GA_PROGRAM.ipch
 build/ga-win64/ALWAYS_COPY_DATA.vcxproj.user
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/d9f9a51ea8c6fee7/GA_JOB.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/b46d5f0189601137/GA_SIM.ipch
+build/ga-win64/.vs/ga1-core/v16/ipch/AutoPCH/2f9e71c15926b14c/GA_INPUT.ipch

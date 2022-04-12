@@ -41,13 +41,8 @@ ga_csg ga_csg::add(ga_csg& other)
     return ga_csg(a.all_polygons());
 }
 
-uint32_t ga_csg::make_vao()
+uint32_t ga_csg::make_vao(GLsizei& index_count)
 {
-    glGenVertexArrays(1, &_vao);
-    glBindVertexArray(_vao);
-
-    glGenBuffers(4, _vbos);
-
     std::vector<ga_vec3f> verts;
     std::vector<ga_vec3f> normals;
     std::vector<ga_vec3f> color;
@@ -67,16 +62,17 @@ uint32_t ga_csg::make_vao()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
-    glBindBuffer(GL_ARRAY_BUFFER, _vbos[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(color), color.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(2);
+    //glBindBuffer(GL_ARRAY_BUFFER, _vbos[2]);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(color), color.data(), GL_STATIC_DRAW);
+    //glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    //glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbos[3]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
 
+    index_count = indices.size();
     return _vao;
 }
 
@@ -86,8 +82,9 @@ GLsizei ga_csg::get_index_count()
 }
 
 void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
-    draw._vao = make_vao();
-    draw._index_count = get_index_count();
+    draw._vao = _vao;
+    draw._index_count = _index_count;
+    draw._material = _material;
 }
 
 struct ConstructInfo {
