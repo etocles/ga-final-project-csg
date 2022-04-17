@@ -72,7 +72,7 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
     //glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbos[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*indices.size(), indices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
 
