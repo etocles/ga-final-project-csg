@@ -21,6 +21,7 @@ ga_csg_plane::~ga_csg_plane()
 
 ga_csg_plane::ga_csg_plane(ga_vec3f& a, ga_vec3f& b, ga_vec3f& c) {
 	_normal = ga_vec3f_cross((b - a), (c - a)).normal();
+	_w = _normal.dot(a);
 }
 
 ga_csg_plane::ga_csg_plane(const ga_csg_plane& other)
@@ -45,5 +46,8 @@ ga_csg_plane ga_csg_plane::flipped()
 
 ga_csg_plane ga_csg_plane::operator=(const ga_csg_plane& other)
 {
-    return ga_csg_plane(other);
+	ga_csg_plane temp;
+	temp._normal = other._normal;
+	temp._w = other._w;
+	return temp;
 }

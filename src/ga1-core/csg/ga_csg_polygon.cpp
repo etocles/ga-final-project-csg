@@ -19,6 +19,27 @@ ga_polygon::ga_polygon()
 ga_polygon::ga_polygon(std::vector<ga_csg_vertex>& verts)
 {
 	_vertices = verts;
+	//_plane = ga_csg_plane(verts[0]._pos, verts[1]._pos, verts[2]._pos);
+	// no clue why = doesn't work, so we have to do this instead.
+	_plane._normal = ga_csg_plane(verts[0]._pos, verts[1]._pos, verts[2]._pos)._normal;
+	_plane._w = ga_csg_plane(verts[0]._pos, verts[1]._pos, verts[2]._pos)._w;
+}
+ga_polygon::ga_polygon(std::vector<ga_csg_vertex>& verts, std::vector<ga_vec3f>& shared)
+{
+	_vertices = verts;
+	_shared = shared;
+	// no clue why = doesn't work, so we have to do this instead.
+	_plane._normal = ga_csg_plane(verts[0]._pos, verts[1]._pos, verts[2]._pos)._normal;
+	_plane._w = ga_csg_plane(verts[0]._pos, verts[1]._pos, verts[2]._pos)._w;
+}
+
+ga_polygon::ga_polygon(const ga_polygon& other)
+{
+	_vertices = other._vertices;
+	_shared = other._shared;
+	// no clue why = doesn't work, so we have to do this instead.
+	_plane._normal = other._plane._normal;
+	_plane._w = other._plane._w;
 }
 ga_polygon::~ga_polygon()
 {
@@ -59,19 +80,6 @@ void ga_polygon::get_vbo_info(std::vector<ga_vec3f>& verts,
 	}
 }
 
-ga_polygon::ga_polygon(std::vector<ga_csg_vertex>& verts, std::vector<ga_vec3f>& shared)
-{
-	_vertices = verts;
-	_shared = shared;
-	_plane = ga_csg_plane(verts[0]._pos, verts[0]._pos, verts[0]._pos);
-}
-
-ga_polygon::ga_polygon(const ga_polygon& other)
-{
-	_vertices = other._vertices;
-	_shared = other._shared;
-	_plane = other._plane;
-}
 
 void ga_polygon::flip()
 {
