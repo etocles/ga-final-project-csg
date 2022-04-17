@@ -46,7 +46,7 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
     std::vector<ga_vec3f> verts;
     std::vector<ga_vec3f> normals;
     std::vector<ga_vec3f> color;
-    std::vector<int> indices;
+    std::vector<GLushort> indices;
     for (int i = 0; i < _polygons.size(); i++) {
         _polygons[i].get_vbo_info(verts, normals, indices, color, _color);
     }
@@ -57,7 +57,7 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
 
     // TODO: Make sure shader aligns with this
     glBindBuffer(GL_ARRAY_BUFFER, _vbos[0]);
-    glBufferData(GL_ARRAY_BUFFER, verts.size()*3*sizeof(float), verts.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, verts.size() * 3 * sizeof(float), verts.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
@@ -72,7 +72,7 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
     //glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbos[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*indices.size(), indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLshort)*indices.size(), &indices[0], GL_STATIC_DRAW);
 
     glBindVertexArray(0);
 

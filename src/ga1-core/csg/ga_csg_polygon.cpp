@@ -26,7 +26,7 @@ ga_polygon::~ga_polygon()
 
 void ga_polygon::get_vbo_info(std::vector<ga_vec3f>& verts,
 								std::vector<ga_vec3f>& normals,
-								std::vector<int>& indices,
+								std::vector<GLushort>& indices,
 								std::vector<ga_vec3f>& colors,
 								const ga_vec3f col)
 {

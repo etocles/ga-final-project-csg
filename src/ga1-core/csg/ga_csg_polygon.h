@@ -15,6 +15,7 @@
 #include "math/ga_vec3f.h"
 #include "ga_plane.h"
 #include "ga_csg_vertex.h"
+#include <GL/glew.h>
 
 #include <string>
 #include <vector>
@@ -35,7 +36,7 @@ public:
 
 	void get_vbo_info(std::vector<ga_vec3f>& verts,
 					  std::vector<ga_vec3f>& normals,
-					  std::vector<int>& indices,
+					  std::vector<GLushort>& indices,
 					  std::vector<ga_vec3f>& colors,
 					  const ga_vec3f col);
 

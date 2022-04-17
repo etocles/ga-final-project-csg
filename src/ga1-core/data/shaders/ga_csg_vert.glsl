@@ -12,4 +12,5 @@ out vec3 o_normal;
 void main(void)
 {
 	gl_Position = vec4(in_vertex, 1.0) * u_mvp;
+	o_normal = in_normal;
 }
