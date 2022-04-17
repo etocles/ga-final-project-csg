@@ -31,7 +31,7 @@ public:
 	virtual void update(struct ga_frame_params* params) override;
 
 
-	void translate(ga_vec3f t) { _csg->translate(t); _csg->make_vao(_csg->_index_count); }
+	void translate(ga_vec3f t) { _csg->translate(t); }
 	ga_csg* get_csg() { return _csg; };
 
 private:

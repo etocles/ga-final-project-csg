@@ -23,12 +23,13 @@ void ga_csg::default_values()
     _material = new ga_csg_material();
     _material->init();
     _material->set_color(_color);
-    _vao = make_vao(_index_count);
+    _vao = make_vao();
 }
 
 ga_csg::ga_csg()
 {
     _polygons = Cube()._polygons;
+    _current_center = { 0.0f,0.0f,0.0f };
     default_values();
 }
 
@@ -45,21 +46,22 @@ ga_csg::ga_csg(ga_csg::Shape shp) {
             break;
     }
     default_values();
-    _vao = make_vao(_index_count);
+    _vao = make_vao();
 }
 
 ga_csg::ga_csg(ga_csg& other) {
     _polygons = other._polygons;
+    _current_center = other._current_center;
     default_values();
     _color = other._color;
     _material->set_color(_color);
-    _vao = make_vao(_index_count);
+    _vao = make_vao();
 }
 
 ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
     _polygons = polys;
     default_values();
-    _vao = make_vao(_index_count);
+    _vao = make_vao();
 }
 
 // Return a new CSG solid representing space in either this solid or in the
@@ -89,7 +91,7 @@ ga_csg ga_csg::add(ga_csg& other)
     return ga_csg(a.all_polygons());
 }
 
-uint32_t ga_csg::make_vao(GLsizei& index_count)
+uint32_t ga_csg::make_vao()
 {
     std::vector<ga_vec3f> verts;
     std::vector<ga_vec3f> normals;
@@ -118,7 +120,7 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
 
     glBindVertexArray(0);
 
-    index_count = indices.size();
+    _index_count = indices.size();
     return _vao;
 }
 
@@ -200,10 +202,20 @@ ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
         polys.push_back(ga_polygon(vs));
     }
 
-    return ga_csg(polys);
+    ga_csg temp = ga_csg(polys);
+    temp._current_center = center;
+    return temp;
 }
 
 void ga_csg::translate(ga_vec3f& t)
 {
-
+    for (int i = 0; i < _polygons.size(); i++) {
+        for (int j = 0; j < _polygons[i]._vertices.size(); j++) {
+            ga_vec3f old_pos = _polygons[i]._vertices[j]._pos;
+            ga_vec3f new_pos = old_pos - _current_center + t;
+            _polygons[i]._vertices[j]._pos = new_pos;
+        }
+    }
+    _current_center = t;
+    make_vao();
 }

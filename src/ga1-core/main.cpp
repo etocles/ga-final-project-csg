@@ -71,7 +71,7 @@ int main(int argc, const char** argv)
 
 	// Create a CSG entity
 	ga_entity csg_test_1;
-	ga_csg_component csg_cube1(&csg_test_1);
+	ga_csg_component csg_cube1(&csg_test_1, ga_csg::Shape::CUBE);
 	sim->add_entity(&csg_test_1);
 
 	// Create a CSG entity 2

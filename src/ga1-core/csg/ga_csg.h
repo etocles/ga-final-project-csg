@@ -40,7 +40,7 @@ public:
 	/* Drawing the CSG to the screen */
 	void assemble_drawcall(ga_static_drawcall& draw);
 
-	/* Retrieve a certain CSG objects polygons */
+	/* Retrieve a certain CSG object's polygons */
 	std::vector<ga_polygon> to_polygons() { return _polygons; };
 
 	ga_csg add(ga_csg& other);
@@ -58,13 +58,15 @@ public:
 
 
 private:
-	uint32_t make_vao(GLsizei& index_count);
+	uint32_t make_vao();
 	void default_values();
 	class ga_material* _material;
 	uint32_t _vao;
 	GLsizei _index_count;
 	uint32_t _vbos[3];
 	ga_vec3f _color;
+	ga_vec3f _current_center;
+	// ga_mat4f _transform; // TODO: Future work, implement this 
 	std::vector<ga_polygon> _polygons;
 
 	friend class ga_csg_component;

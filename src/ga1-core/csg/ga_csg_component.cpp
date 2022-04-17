@@ -10,10 +10,6 @@
 
 #include "ga_csg_component.h"
 
-ga_csg_component::ga_csg_component(class ga_entity* ent) : ga_component(ent) {
-    _csg = new ga_csg();
-}
-
 ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg::Shape which_shape, ga_vec3f translation, ga_vec3f color) : ga_component(ent) {
     //_csg = new ga_csg(which_shape);
     _csg = new ga_csg(ga_csg::Cube({ 1.0f,1.0f,1.0f }, translation));
