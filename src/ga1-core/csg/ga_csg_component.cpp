@@ -14,6 +14,16 @@ ga_csg_component::ga_csg_component(class ga_entity* ent) : ga_component(ent) {
     _csg = new ga_csg();
 }
 
+ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg::Shape which_shape, ga_vec3f translation, ga_vec3f color) : ga_component(ent) {
+    //_csg = new ga_csg(which_shape);
+    _csg = new ga_csg(ga_csg::Cube({ 1.0f,1.0f,1.0f }, translation));
+    _csg->set_color(color);
+}
+
+ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg& csg1, ga_csg& csg2) : ga_component(ent) {
+    _csg = new ga_csg(csg1.add(csg2));
+}
+
 ga_csg_component::~ga_csg_component() {
     delete _csg;
 }

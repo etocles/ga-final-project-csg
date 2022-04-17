@@ -97,7 +97,7 @@ void ga_node::build(std::vector<ga_polygon>& polys)
 	if (!_plane) _plane = new ga_csg_plane(polys[0]._plane);
 	std::vector<ga_polygon> front;
 	std::vector<ga_polygon> back;
-	for (int i = 0; i < _polygons.size(); i++) {
+	for (int i = 0; i < polys.size(); i++) {
 		split_polygon(*_plane, polys[i], _polygons, _polygons, front, back);
 	}
 	if (front.size() != 0) {

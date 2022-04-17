@@ -14,6 +14,54 @@
 #include "math/ga_vec4f.h"
 #include <vector>
 
+
+
+// TODO: Propogate these important assemblies into each constructor
+void ga_csg::default_values()
+{
+    _color = { 1.0f,1.0f,1.0f };
+    _material = new ga_csg_material();
+    _material->init();
+    _material->set_color(_color);
+    _vao = make_vao(_index_count);
+}
+
+ga_csg::ga_csg()
+{
+    _polygons = Cube()._polygons;
+    default_values();
+}
+
+ga_csg::ga_csg(ga_csg::Shape shp) {
+    switch (shp) {
+        case Shape::CUBE:
+            _polygons = Cube()._polygons;
+            break;
+        case Shape::SPHERE:
+            //_polygons = Sphere()._polygons;
+            break;
+        case Shape::PYRAMID:
+            //_polygons = Pyramid()._polygons;
+            break;
+    }
+    default_values();
+    _vao = make_vao(_index_count);
+}
+
+ga_csg::ga_csg(ga_csg& other) {
+    _polygons = other._polygons;
+    default_values();
+    _color = other._color;
+    _material->set_color(_color);
+    _vao = make_vao(_index_count);
+}
+
+ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
+    _polygons = polys;
+    default_values();
+    _vao = make_vao(_index_count);
+}
+
 // Return a new CSG solid representing space in either this solid or in the
   // solid `csg`. Neither this solid nor the solid `csg` are modified.
   // 
@@ -74,10 +122,6 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
     return _vao;
 }
 
-GLsizei ga_csg::get_index_count()
-{
-    return GLsizei();
-}
 
 void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
     draw._vao = _vao;
@@ -91,17 +135,8 @@ public:
     ga_vec3f norm;
 };
 ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
-    center = ga_vec3f::zero_vector(); // TODO: Remove
     // what the csg will be made with
     std::vector<ga_polygon> polys;
-    // hard coded data for a cube
-    //std::vector<ConstructInfo> temp = 
-    //                {{{0, 4, 6, 2},{-1, 0, 0}},
-    //                {{1, 3, 7, 5},{+1, 0, 0}},
-    //                {{0, 1, 5, 4},{0, -1, 0}},
-    //                {{2, 6, 7, 3},{0, +1, 0}},
-    //                {{0, 2, 3, 1},{0, 0, -1}},
-    //                {{4, 5, 7, 6},{0, 0, +1}}};
 
     //for (int i = 0; i < temp.size(); i++) {
     //    std::vector<ga_csg_vertex> vs;
@@ -160,10 +195,15 @@ ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
     for (int i = 0; i < vertices.size(); i += 4) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < 4; j++) {
-            vs.push_back(ga_csg_vertex(vertices[i+j], norms[i/4]));
+            vs.push_back(ga_csg_vertex((center + vertices[i+j]).scale_result(radius.axes[0]), norms[i/4]));
         }
         polys.push_back(ga_polygon(vs));
     }
 
     return ga_csg(polys);
+}
+
+void ga_csg::translate(ga_vec3f& t)
+{
+
 }

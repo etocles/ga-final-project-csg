@@ -22,6 +22,9 @@
 
 #include "csg/ga_csg_component.h"
 
+#include "physics/ga_physics_component.h"
+#include "physics/ga_shape.h"
+
 #include "gui/ga_font.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -60,16 +63,33 @@ int main(int argc, const char** argv)
 	camera->rotate(rotation);
 
 	// Create an entity whose movement is driven by Lua script.
-	ga_entity lua;
-	lua.translate({ 0.0f, 2.0f, 1.0f });
-	ga_lua_component lua_move(&lua, "data/scripts/move.lua");
-	ga_cube_component lua_model(&lua, "data/textures/rpi.png");
-	sim->add_entity(&lua);
+	//ga_entity lua;
+	//lua.translate({ 0.0f, 2.0f, 1.0f });
+	//ga_lua_component lua_move(&lua, "data/scripts/move.lua");
+	//ga_cube_component lua_model(&lua, "data/textures/rpi.png");
+	//sim->add_entity(&lua);
 
 	// Create a CSG entity
 	ga_entity csg_test_1;
-	ga_csg_component csg_comp(&csg_test_1);
+	ga_csg_component csg_cube1(&csg_test_1);
 	sim->add_entity(&csg_test_1);
+
+	// Create a CSG entity 2
+	ga_entity csg_test_2;
+	ga_csg_component csg_cube2(&csg_test_2, ga_csg::Shape::CUBE, {1.0f,1.5f,0.0f}, { 1.0f,0.0f,0.0f });
+	sim->add_entity(&csg_test_2);
+
+	// Create a combination of the two
+	//ga_entity csg_test_COMBO;
+	//ga_csg_component csg_COMBINE(&csg_test_COMBO, *csg_cube1._csg, *csg_cube2._csg);
+	//sim->add_entity(&csg_test_COMBO);
+
+	ga_entity floor;
+	ga_plane floor_plane;
+	ga_physics_component floor_collider(&floor, &floor_plane, 0.0f);
+	floor_plane._point = { 0.0f, 0.0f, 0.0f };
+	floor_plane._normal = { 0.0f, 1.0f, 0.0f };
+	sim->add_entity(&floor);
 
 	// Main loop:
 	while (true)

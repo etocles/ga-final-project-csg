@@ -25,17 +25,13 @@
 class ga_csg
 {
 public:
-	ga_csg()
-	{
-		_polygons = Cube()._polygons;
-		_color = { 1.0f,1.0f,1.0f };
-		_material = new ga_csg_material();
-		_material->init();
-		_material->set_color(_color);
-		_vao = make_vao(_index_count);
-	}
-	ga_csg(ga_csg& other) { _polygons = other._polygons; };
-	ga_csg(std::vector<ga_polygon>& polys) { _polygons = polys; };
+	static enum class Shape { CUBE, SPHERE, PYRAMID };
+
+	// TODO: Propogate these important assemblies into each constructor
+	ga_csg();
+	ga_csg(Shape shp);
+	ga_csg(ga_csg& other);;
+	ga_csg(std::vector<ga_polygon>& polys);;
 	~ga_csg() {
 		glDeleteVertexArrays(1, (GLuint*)&_vao);
 		glDeleteBuffers(3, _vbos);
@@ -51,21 +47,23 @@ public:
 	//ga_csg subtract(ga_csg& other);
 	//ga_csg intersect(ga_csg& other);
 
-	ga_csg Cube(ga_vec3f radius = { 1,1,1 },
+	ga_csg static Cube(ga_vec3f radius = { 1,1,1 },
 				ga_vec3f center = { 0,0,0 });
 	//ga_csg Sphere();
 	//ga_csg Pyramid();
 
-	void set_color(ga_vec3f& col) { _color = col; };
+	void set_color(ga_vec3f& col) { _color = col; _material->set_color(col); };
+	void translate(ga_vec3f& t); // TODO: Needed? YES NEEDED
+	void extrude(ga_vec3f& t); // TODO: Implement
 
 
 private:
 	uint32_t make_vao(GLsizei& index_count);
-	GLsizei get_index_count();
+	void default_values();
 	class ga_material* _material;
 	uint32_t _vao;
 	GLsizei _index_count;
-	uint32_t _vbos[4];
+	uint32_t _vbos[3];
 	ga_vec3f _color;
 	std::vector<ga_polygon> _polygons;
 
