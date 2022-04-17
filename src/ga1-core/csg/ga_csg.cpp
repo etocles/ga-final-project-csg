@@ -53,9 +53,8 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
 
     glGenVertexArrays(1, &_vao);
     glBindVertexArray(_vao);
-    glGenBuffers(4, _vbos);
+    glGenBuffers(3, _vbos);
 
-    // TODO: Make sure shader aligns with this
     glBindBuffer(GL_ARRAY_BUFFER, _vbos[0]);
     glBufferData(GL_ARRAY_BUFFER, verts.size() * 3 * sizeof(float), verts.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -66,12 +65,7 @@ uint32_t ga_csg::make_vao(GLsizei& index_count)
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
-    //glBindBuffer(GL_ARRAY_BUFFER, _vbos[2]);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(color), color.data(), GL_STATIC_DRAW);
-    //glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    //glEnableVertexAttribArray(2);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbos[3]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vbos[2]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLshort)*indices.size(), &indices[0], GL_STATIC_DRAW);
 
     glBindVertexArray(0);

@@ -38,7 +38,7 @@ public:
 	ga_csg(std::vector<ga_polygon>& polys) { _polygons = polys; };
 	~ga_csg() {
 		glDeleteVertexArrays(1, (GLuint*)&_vao);
-		glDeleteBuffers(4, _vbos);
+		glDeleteBuffers(3, _vbos);
 	};
 
 	/* Drawing the CSG to the screen */
