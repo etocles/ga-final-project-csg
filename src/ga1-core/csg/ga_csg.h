@@ -28,9 +28,8 @@ public:
 	static enum class Shape { CUBE, SPHERE, PYRAMID };
 
 	// TODO: Propogate these important assemblies into each constructor
-	ga_csg();
 	ga_csg(Shape shp);
-	ga_csg(ga_csg& other);;
+	ga_csg(ga_csg& other);
 	ga_csg(std::vector<ga_polygon>& polys);;
 	~ga_csg() {
 		glDeleteVertexArrays(1, (GLuint*)&_vao);
@@ -47,13 +46,12 @@ public:
 	//ga_csg subtract(ga_csg& other);
 	//ga_csg intersect(ga_csg& other);
 
-	ga_csg static Cube(ga_vec3f radius = { 1,1,1 },
-				ga_vec3f center = { 0,0,0 });
+	ga_csg static Cube(ga_vec3f center = { 0.0f,0.0f,0.0f });
 	//ga_csg Sphere();
 	//ga_csg Pyramid();
 
 	void set_color(ga_vec3f& col) { _color = col; _material->set_color(col); };
-	void translate(ga_vec3f& t); // TODO: Needed? YES NEEDED
+	void translate(ga_vec3f& t);
 	void extrude(ga_vec3f& t); // TODO: Implement
 
 

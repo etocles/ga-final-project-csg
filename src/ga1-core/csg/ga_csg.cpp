@@ -23,15 +23,10 @@ void ga_csg::default_values()
     _material = new ga_csg_material();
     _material->init();
     _material->set_color(_color);
+    _current_center = { 0.0f,0.0f,0.0f };
     _vao = make_vao();
 }
 
-ga_csg::ga_csg()
-{
-    _polygons = Cube()._polygons;
-    _current_center = { 0.0f,0.0f,0.0f };
-    default_values();
-}
 
 ga_csg::ga_csg(ga_csg::Shape shp) {
     switch (shp) {
@@ -136,7 +131,7 @@ public:
     ga_vec4f ind;
     ga_vec3f norm;
 };
-ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
+ga_csg ga_csg::Cube(ga_vec3f center) {
     // what the csg will be made with
     std::vector<ga_polygon> polys;
 
@@ -197,7 +192,7 @@ ga_csg ga_csg::Cube(ga_vec3f radius, ga_vec3f center) {
     for (int i = 0; i < vertices.size(); i += 4) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < 4; j++) {
-            vs.push_back(ga_csg_vertex((center + vertices[i+j]).scale_result(radius.axes[0]), norms[i/4]));
+            vs.push_back(ga_csg_vertex(center + vertices[i+j], norms[i/4]));
         }
         polys.push_back(ga_polygon(vs));
     }
