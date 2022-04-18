@@ -43,8 +43,8 @@ public:
 	std::vector<ga_polygon> to_polygons() { return _polygons; };
 
 	ga_csg add(ga_csg& other);
-	//ga_csg subtract(ga_csg& other);
-	//ga_csg intersect(ga_csg& other);
+	ga_csg subtract(ga_csg& other);
+	ga_csg intersect(ga_csg& other);
 
 	ga_csg static Cube(ga_vec3f center = { 0.0f,0.0f,0.0f });
 	//ga_csg Sphere();

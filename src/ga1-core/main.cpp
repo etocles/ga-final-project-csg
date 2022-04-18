@@ -72,26 +72,30 @@ int main(int argc, const char** argv)
 	// Create a CSG entity
 	ga_entity csg_test_1;
 	ga_csg_component csg_cube1(&csg_test_1, ga_csg::Shape::CUBE);
-	//sim->add_entity(&csg_test_1);
+	sim->add_entity(&csg_test_1);
 
 	// Create a CSG entity 2
 	ga_entity csg_test_2;
 	ga_csg_component csg_cube2(&csg_test_2, ga_csg::Shape::CUBE, {1.0f,1.5f,0.0f}, { 1.0f,0.0f,0.0f });
-	//sim->add_entity(&csg_test_2);
+	sim->add_entity(&csg_test_2);
 
 	// Create a CSG entity 3
 	ga_entity csg_test_3;
 	ga_csg_component csg_cube3(&csg_test_3, ga_csg::Shape::CUBE, { 0.5f,1.0f,1.0f }, { 0.0f,1.0f,0.0f });
-	//sim->add_entity(&csg_test_3);
+	sim->add_entity(&csg_test_3);
 
 	// Create a combination of the two
 	ga_entity csg_test_COMBO;
 	ga_csg_component csg_COMBINE(&csg_test_COMBO, *csg_cube1.get_csg(), *csg_cube2.get_csg());
-	//sim->add_entity(&csg_test_COMBO);
+	sim->add_entity(&csg_test_COMBO);
 
 	ga_entity csg_test_COMBO2;
 	ga_csg_component csg_COMBINE2(&csg_test_COMBO2, *csg_COMBINE.get_csg(), *csg_cube3.get_csg());
-	csg_COMBINE2.translate({ 0.0f,2.0f,0.0f });
+	csg_COMBINE2.translate({ 6.0f,1.0f,0.0f });
+	csg_COMBINE.translate({ 0.0f,1.0f,0.0f });
+	csg_cube1.translate({ -4.0f,1.0f,0.0f });
+	csg_cube2.translate({ -4.0f,1.0f,0.0f });
+	csg_cube3.translate({ 3.0f,1.0f,0.5f });
 	sim->add_entity(&csg_test_COMBO2);
 
 	ga_entity floor;

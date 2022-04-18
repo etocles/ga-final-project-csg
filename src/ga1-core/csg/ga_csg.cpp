@@ -89,6 +89,73 @@ ga_csg ga_csg::add(ga_csg& other)
     return temp;
 }
 
+// Return a new CSG solid representing space in this solid but not in the
+ // solid `csg`. Neither this solid nor the solid `csg` are modified.
+ // 
+ //     A.subtract(B)
+ // 
+ //     +-------+            +-------+
+ //     |       |            |       |
+ //     |   A   |            |       |
+ //     |    +--+----+   =   |    +--+
+ //     +----+--+    |       +----+
+ //          |   B   |
+ //          |       |
+ //          +-------+
+ // 
+ga_csg ga_csg::subtract(ga_csg& other)
+{
+    // TODO: NEEDS DEBUGGING
+    ga_node a = ga_node(_polygons);
+    ga_node b = ga_node(other._polygons);
+    a.clip_to(ga_node(other._polygons));
+    b.clip_to(ga_node(_polygons));
+    a.invert();
+    a.clip_to(b);
+    b.clip_to(a);
+    b.invert();
+    b.clip_to(a);
+    b.invert();
+    a.build(b.all_polygons());
+    a.invert();
+    ga_csg temp = ga_csg(a.all_polygons());
+    temp.set_color(ga_vec3f_lerp(_color, other._color, 0.5));
+    temp.make_vao();
+    return temp;
+}
+
+// Return a new CSG solid representing space both this solid and in the
+// solid `csg`. Neither this solid nor the solid `csg` are modified.
+// 
+//     A.intersect(B)
+// 
+//     +-------+
+//     |       |
+//     |   A   |
+//     |    +--+----+   =   +--+
+//     +----+--+    |       +--+
+//          |   B   |
+//          |       |
+//          +-------+
+// 
+ga_csg ga_csg::intersect(ga_csg& other){
+    // TODO: NEEDS DEBUGGING
+    ga_node a = ga_node(_polygons);
+    ga_node b = ga_node(other._polygons);
+    a.invert();
+    b.clip_to(a);
+    b.invert();
+    a.clip_to(b);
+    b.clip_to(a);
+    a.build(b.all_polygons());
+    a.invert();
+    ga_csg temp = ga_csg(a.all_polygons());
+    temp.set_color(ga_vec3f_lerp(_color, other._color, 0.5));
+    temp.make_vao();
+    return temp;
+}
+
+
 uint32_t ga_csg::make_vao()
 {
     std::vector<ga_vec3f> verts;
