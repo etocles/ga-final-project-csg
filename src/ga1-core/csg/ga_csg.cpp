@@ -77,13 +77,16 @@ ga_csg ga_csg::add(ga_csg& other)
 {
     ga_node a = ga_node(_polygons);
     ga_node b = ga_node(other._polygons);
-    a.clip_to(b);
-    b.clip_to(a);
-    b.invert();
-    b.clip_to(a);
-    b.invert();
+    a.clip_to(ga_node(other._polygons));
+    b.clip_to(ga_node(_polygons));
+    //b.invert();
+    //b.clip_to(ga_node(other._polygons));
+    //b.invert();
     a.build(b.all_polygons());
-    return ga_csg(a.all_polygons());
+    ga_csg temp =  ga_csg(a.all_polygons());
+    temp.set_color(ga_vec3f_lerp(_color, other._color, 0.5));
+    temp.make_vao();
+    return temp;
 }
 
 uint32_t ga_csg::make_vao()

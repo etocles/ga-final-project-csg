@@ -61,7 +61,8 @@ void ga_node::clip_to(ga_node& bsp)
 
 std::vector<ga_polygon> ga_node::clip_polygons(std::vector<ga_polygon>& polys)
 {
-	if (!_plane) return std::vector<ga_polygon>(_polygons);
+	if (!_plane) 
+		return std::vector<ga_polygon>(_polygons);
 	std::vector<ga_polygon> front;
 	std::vector<ga_polygon> back;
 	for (int i = 0; i < _polygons.size(); i++) {
@@ -79,14 +80,16 @@ std::vector<ga_polygon> ga_node::all_polygons()
 {
 	std::vector<ga_polygon> polygons = _polygons;
 	if (_front) {
-		polygons.insert(polygons.end(),
-			_front->all_polygons().begin(), 
-			_front->all_polygons().end());
+		std::vector<ga_polygon> temp = _front->all_polygons();
+		if (temp.size() != 0) {
+			polygons.insert(polygons.end(), temp.begin(), temp.end());
+		}
 	}
 	if (_back) {
-		polygons.insert(polygons.end(),
-			_back->all_polygons().begin(),
-			_back->all_polygons().end());
+		std::vector<ga_polygon> temp = _back->all_polygons();
+		if (temp.size() != 0) {
+			polygons.insert(polygons.end(), temp.begin(), temp.end());
+		}
 	}
 	return polygons;
 }
