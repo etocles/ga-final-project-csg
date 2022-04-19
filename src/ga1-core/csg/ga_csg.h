@@ -43,29 +43,51 @@ public:
 	/* Retrieve a certain CSG object's polygons */
 	std::vector<ga_polygon> to_polygons() { return _polygons; };
 
+	/* Retrieve the CSG's polygons as they appear in unit-space */
+	std::vector<ga_polygon> get_polygons_raw() { return _polygons; };
+
+	/* Retrieve a certain CSG object's polygons as they appear on-screen
+	*  !! VERY EXPENSIVE OPERATION !!
+	*/
+	std::vector<ga_polygon> get_polygons() {
+		std::vector<ga_polygon> res;
+		for (int i = 0; i < _polygons.size(); i++) {
+			std::vector<ga_csg_vertex> temp_verts;
+			for (int j = 0; j < _polygons[i]._vertices.size(); j++) {
+				ga_vec3f old_pos = _polygons[i]._vertices[j]._pos;
+				ga_vec4f temp = { old_pos.x, old_pos.y, old_pos.z, 1.0f }; // might need to be 0.0
+				temp = _transform.transform(temp);
+				ga_vec3f new_pos = { temp.x, temp.y, temp.z };
+				temp_verts.push_back(ga_csg_vertex(new_pos, _polygons[i]._vertices[j]._normal));
+			}
+			res.push_back(ga_polygon(temp_verts));
+		}
+		return res;
+	}
+
 	ga_csg add(ga_csg& other);
 	ga_csg subtract(ga_csg& other);
 	ga_csg intersect(ga_csg& other);
 
-	ga_csg static Cube(ga_vec3f center = { 0.0f,0.0f,0.0f });
+	ga_csg static Cube();
 	//ga_csg Sphere();
 	//ga_csg Pyramid();
 
 	void set_color(ga_vec3f& col) { _color = col; _material->set_color(col); };
 	void translate(ga_vec3f& t);
+	void scale(ga_vec3f& t);
 	void extrude(ga_vec3f& t); // TODO: Implement
 
 
 private:
 	uint32_t make_vao();
 	void default_values();
-	class ga_material* _material;
+	class ga_csg_material* _material;
 	uint32_t _vao;
 	GLsizei _index_count;
 	uint32_t _vbos[3];
 	ga_vec3f _color;
-	ga_vec3f _current_center;
-	// ga_mat4f _transform; // TODO: Future work, implement this 
+	ga_mat4f _transform;
 	std::vector<ga_polygon> _polygons;
 
 	friend class ga_csg_component;

@@ -45,19 +45,17 @@ ga_polygon::~ga_polygon()
 {
 }
 
-void ga_polygon::get_vbo_info(std::vector<ga_vec3f>& verts,
+void ga_polygon::get_vbo_info(ga_mat4f& transform,
+								std::vector<ga_vec3f>& verts,
 								std::vector<ga_vec3f>& normals,
-								std::vector<GLushort>& indices,
-								std::vector<ga_vec3f>& colors,
-								const ga_vec3f col)
+								std::vector<GLushort>& indices)
 {
 	int start_index = indices.size() == 0 
 						? 0 
 						: *std::max_element(indices.begin(), indices.end())+1;
 	if (isTri()) {
 		for (int i = 0; i < 3; i++) {
-			colors.push_back(col);
-			verts.push_back(_vertices[i]._pos);
+			verts.push_back(_vertices[i].transform(transform)._pos);
 			normals.push_back(_vertices[i]._normal);
 			indices.push_back(start_index + i);
 		}
@@ -66,9 +64,8 @@ void ga_polygon::get_vbo_info(std::vector<ga_vec3f>& verts,
 	else if (isQuad()) {
 		int arr[] = { 0,1,2,2,3,0 };
 		for (int i = 0; i < 4; i++) {
-			verts.push_back(_vertices[i]._pos);
+			verts.push_back(_vertices[i].transform(transform)._pos);
 			normals.push_back(_vertices[i]._normal);
-			colors.push_back(col);
 		}
 		for (int i = 0; i < 6; i ++) {
 			indices.push_back(start_index + arr[i]);

@@ -41,7 +41,8 @@
 
 ga_font* g_font = nullptr;
 static void set_root_path(const char* exepath);
-static void gui_test(ga_frame_params* params);
+static void gui_test(ga_frame_params* params, ga_csg_component& ref);
+ga_vec3f current_scale = { 1.0f,1.0f,1.0f };
 
 int main(int argc, const char** argv)
 {
@@ -87,11 +88,11 @@ int main(int argc, const char** argv)
 
 	ga_entity csg_test_COMBO2;
 	ga_csg_component csg_COMBINE2(&csg_test_COMBO2, *csg_COMBINE.get_csg(), *csg_cube3.get_csg());
-	csg_COMBINE2.translate({ 6.0f,1.0f,0.0f });
-	csg_COMBINE.translate({ 0.0f,1.0f,0.0f });
-	csg_cube1.translate({ -4.0f,1.0f,0.0f });
-	csg_cube2.translate({ -4.0f,1.0f,0.0f });
-	csg_cube3.translate({ 3.0f,1.0f,0.5f });
+	csg_COMBINE2.set_pos({ 6.0f,1.0f,0.0f });
+	csg_COMBINE.set_pos({ -1.0f,1.0f,0.0f });
+	csg_cube1.set_pos({ -4.5f,1.0f,0.0f });
+	csg_cube2.set_pos({ -3.5f,2.5f,0.0f });
+	csg_cube3.set_pos({ 3.0f,2.0f,1.0f });
 	sim->add_entity(&csg_test_COMBO2);
 
 	ga_entity floor;
@@ -123,7 +124,7 @@ int main(int argc, const char** argv)
 		sim->late_update(&params);
 
 		// Run gui test.
-		gui_test(&params);
+		gui_test(&params, csg_cube1);
 
 		// Draw to screen.
 		output->update(&params);
@@ -166,16 +167,16 @@ static void set_root_path(const char* exepath)
 #endif
 }
 
-static void gui_test(ga_frame_params* params)
+static void gui_test(ga_frame_params* params, ga_csg_component& ref)
 {
 	ga_label("CSG Demo", 10, 20, params);
 
-	//if (ga_button("Show Cube", 20.0f, 200.0f, params).get_clicked(params))
-	//{
-	//	//cube.set_active(true);
-	//	//model.set_active(false);
-	//	//model2.set_active(false);
-	//}
+
+	if (ga_button("Extrude Cube1", 20.0f, 200.0f, params).get_clicked(params))
+	{
+		current_scale += {0.1f, 0.0f, 0.0f};
+		ref.set_scale(current_scale);
+	}
 	//if (ga_button("Show Model 1", 20.0f, 250.0f, params).get_clicked(params))
 	//{
 	//	//cube.set_active(false);

@@ -14,6 +14,7 @@
 */
 
 #include "math/ga_vec3f.h"
+#include "math/ga_mat4f.h"
 
 #include <string>
 #include <vector>
@@ -34,6 +35,7 @@ public:
 	void flip();
 	ga_csg_vertex flipped();
 	ga_csg_vertex interpolate(ga_csg_vertex& b, float t);
+	ga_csg_vertex transform(ga_mat4f& _mat);
 
 	ga_vec3f _pos;
 	ga_vec3f _normal;

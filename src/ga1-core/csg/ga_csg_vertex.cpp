@@ -46,3 +46,12 @@ ga_csg_vertex ga_csg_vertex::interpolate(ga_csg_vertex& b, float t)
 	temp._normal = ga_vec3f_lerp(_normal, b._normal, t);
 	return temp;
 }
+
+ga_csg_vertex ga_csg_vertex::transform(ga_mat4f& _mat)
+{
+	ga_vec3f old_pos = _pos;
+	ga_vec4f temp = { old_pos.x, old_pos.y, old_pos.z, 1.0f }; // might need to be 0.0
+	temp = _mat.transform(temp);
+	ga_vec3f new_pos = { temp.x, temp.y, temp.z };
+	return ga_csg_vertex(new_pos, _normal);
+}

@@ -23,11 +23,11 @@ void ga_csg::default_values()
     _material = new ga_csg_material();
     _material->init();
     _material->set_color(_color);
-    _current_center = { 0.0f,0.0f,0.0f };
     _vao = make_vao();
+    _transform.make_identity();
 }
 
-
+#pragma region CONSTRUCTORS
 ga_csg::ga_csg(ga_csg::Shape shp) {
     switch (shp) {
         case Shape::CUBE:
@@ -46,7 +46,6 @@ ga_csg::ga_csg(ga_csg::Shape shp) {
 
 ga_csg::ga_csg(ga_csg& other) {
     _polygons = other._polygons;
-    _current_center = other._current_center;
     default_values();
     _color = other._color;
     _material->set_color(_color);
@@ -58,6 +57,10 @@ ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
     default_values();
     _vao = make_vao();
 }
+
+#pragma endregion
+
+#pragma region OPERATIONS
 
 // Return a new CSG solid representing space in either this solid or in the
   // solid `csg`. Neither this solid nor the solid `csg` are modified.
@@ -75,10 +78,12 @@ ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
   // 
 ga_csg ga_csg::add(ga_csg& other)
 {
-    ga_node a = ga_node(_polygons);
-    ga_node b = ga_node(other._polygons);
-    a.clip_to(ga_node(other._polygons));
-    b.clip_to(ga_node(_polygons));
+    std::vector<ga_polygon> own_adjusted_polys = get_polygons();
+    std::vector<ga_polygon> other_adjusted_polys = other.get_polygons();
+    ga_node a = ga_node(own_adjusted_polys);
+    ga_node b = ga_node(other_adjusted_polys);
+    a.clip_to(ga_node(own_adjusted_polys));
+    b.clip_to(ga_node(other_adjusted_polys));
     //b.invert();
     //b.clip_to(ga_node(other._polygons));
     //b.invert();
@@ -156,15 +161,17 @@ ga_csg ga_csg::intersect(ga_csg& other){
     return temp;
 }
 
+#pragma endregion 
+
+#pragma region DRAWING TO SCREEN
 
 uint32_t ga_csg::make_vao()
 {
     std::vector<ga_vec3f> verts;
     std::vector<ga_vec3f> normals;
-    std::vector<ga_vec3f> color;
     std::vector<GLushort> indices;
     for (int i = 0; i < _polygons.size(); i++) {
-        _polygons[i].get_vbo_info(verts, normals, indices, color, _color);
+        _polygons[i].get_vbo_info(_transform, verts, normals, indices);
     }
 
     glGenVertexArrays(1, &_vao);
@@ -197,12 +204,11 @@ void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
     draw._material = _material;
 }
 
-struct ConstructInfo {
-public:
-    ga_vec4f ind;
-    ga_vec3f norm;
-};
-ga_csg ga_csg::Cube(ga_vec3f center) {
+#pragma endregion
+
+#pragma region SHAPES
+// Creates a unit cube, centered at the origin.
+ga_csg ga_csg::Cube() {
     // what the csg will be made with
     std::vector<ga_polygon> polys;
 
@@ -263,25 +269,23 @@ ga_csg ga_csg::Cube(ga_vec3f center) {
     for (int i = 0; i < vertices.size(); i += 4) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < 4; j++) {
-            vs.push_back(ga_csg_vertex(center + vertices[i+j], norms[i/4]));
+            vs.push_back(ga_csg_vertex(vertices[i+j], norms[i/4]));
         }
         polys.push_back(ga_polygon(vs));
     }
 
     ga_csg temp = ga_csg(polys);
-    temp._current_center = center;
     return temp;
 }
+#pragma endregion
 
 void ga_csg::translate(ga_vec3f& t)
 {
-    for (int i = 0; i < _polygons.size(); i++) {
-        for (int j = 0; j < _polygons[i]._vertices.size(); j++) {
-            ga_vec3f old_pos = _polygons[i]._vertices[j]._pos;
-            ga_vec3f new_pos = old_pos - _current_center + t;
-            _polygons[i]._vertices[j]._pos = new_pos;
-        }
-    }
-    _current_center = t;
-    make_vao();
+    _transform.set_translation(t);
+}
+void ga_csg::scale(ga_vec3f& t)
+{
+    _transform.data[0][0] = t.axes[0];
+    _transform.data[1][1] = t.axes[1];
+    _transform.data[2][2] = t.axes[2];
 }

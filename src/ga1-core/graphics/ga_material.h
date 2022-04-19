@@ -108,11 +108,14 @@ public:
 
 	virtual void bind(const ga_mat4f& view_proj, const ga_mat4f& transform) override;
 
+	virtual void set_transform(const ga_mat4f& mat) { _csg_transform = mat; };
+
 	virtual void set_color(const ga_vec3f& color) override { _color = color; }
 
 private:
 	ga_shader* _vs;
 	ga_shader* _fs;
+	ga_mat4f _csg_transform;
 	ga_program* _program;
 	ga_vec3f _color;
 };

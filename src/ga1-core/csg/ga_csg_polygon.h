@@ -13,6 +13,7 @@
 */
 
 #include "math/ga_vec3f.h"
+#include "math/ga_mat4f.h"
 #include "ga_plane.h"
 #include "ga_csg_vertex.h"
 #include <GL/glew.h>
@@ -34,11 +35,10 @@ public:
 	ga_polygon flipped();
 	~ga_polygon();
 
-	void get_vbo_info(std::vector<ga_vec3f>& verts,
+	void get_vbo_info(ga_mat4f& transform, 
+					  std::vector<ga_vec3f>& verts,
 					  std::vector<ga_vec3f>& normals,
-					  std::vector<GLushort>& indices,
-					  std::vector<ga_vec3f>& colors,
-					  const ga_vec3f col);
+					  std::vector<GLushort>& indices);
 
 	bool isTri() { return _vertices.size() == 3; };
 	bool isQuad() { return _vertices.size() == 4; };

@@ -210,6 +210,7 @@ void ga_animated_material::bind(const ga_mat4f& view_proj, const ga_mat4f& trans
 
 ga_csg_material::ga_csg_material()
 {
+	_csg_transform.make_identity();
 }
 
 ga_csg_material::~ga_csg_material()
@@ -254,7 +255,7 @@ void ga_csg_material::bind(const ga_mat4f& view_proj, const ga_mat4f& transform)
 
 	_program->use();
 
-	mvp_uniform.set(transform * view_proj);
+	mvp_uniform.set(_csg_transform * transform * view_proj);
 	color_uniform.set(_color);
 
 	glDisable(GL_BLEND);
