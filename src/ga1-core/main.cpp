@@ -179,7 +179,6 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 {
 	ga_label("CSG Demo", 10, 20, params);
 
-
 	if (ga_button("Scale Cube1", 20.0f, 50.0f, params).get_clicked(params))
 	{
 		current_scale += {0.1f, 0.0f, 0.0f};
@@ -218,10 +217,4 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 		float zpos = fmodf(rand(), 5.0f);
 		temp = new ga_csg_component(ent, ga_csg::Shape::PYRAMID, { xpos,ypos,zpos });
 	}
-	//if (ga_button("Show Model 2", 20.0f, 300.0f, params).get_clicked(params))
-	//{
-	//	//cube.set_active(false);
-	//	//model.set_active(false);
-	//	//model2.set_active(true);
-	//}
 }
