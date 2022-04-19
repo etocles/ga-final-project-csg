@@ -26,6 +26,8 @@
 #include "physics/ga_shape.h"
 
 #include "gui/ga_font.h"
+#include "gui/ga_label.h"
+#include "gui/ga_button.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -39,6 +41,7 @@
 
 ga_font* g_font = nullptr;
 static void set_root_path(const char* exepath);
+static void gui_test(ga_frame_params* params);
 
 int main(int argc, const char** argv)
 {
@@ -61,13 +64,6 @@ int main(int argc, const char** argv)
 	camera->rotate(rotation);
 	rotation.make_axis_angle(ga_vec3f::x_vector(), ga_degrees_to_radians(15.0f));
 	camera->rotate(rotation);
-
-	// Create an entity whose movement is driven by Lua script.
-	//ga_entity lua;
-	//lua.translate({ 0.0f, 2.0f, 1.0f });
-	//ga_lua_component lua_move(&lua, "data/scripts/move.lua");
-	//ga_cube_component lua_model(&lua, "data/textures/rpi.png");
-	//sim->add_entity(&lua);
 
 	// Create a CSG entity
 	ga_entity csg_test_1;
@@ -126,6 +122,9 @@ int main(int argc, const char** argv)
 		// Perform the late update.
 		sim->late_update(&params);
 
+		// Run gui test.
+		gui_test(&params);
+
 		// Draw to screen.
 		output->update(&params);
 	}
@@ -165,4 +164,28 @@ static void set_root_path(const char* exepath)
 	g_root_path[strlen(cwd)] = '/';
 	g_root_path[strlen(cwd) + 1] = '\0';
 #endif
+}
+
+static void gui_test(ga_frame_params* params)
+{
+	ga_label("CSG Demo", 10, 20, params);
+
+	//if (ga_button("Show Cube", 20.0f, 200.0f, params).get_clicked(params))
+	//{
+	//	//cube.set_active(true);
+	//	//model.set_active(false);
+	//	//model2.set_active(false);
+	//}
+	//if (ga_button("Show Model 1", 20.0f, 250.0f, params).get_clicked(params))
+	//{
+	//	//cube.set_active(false);
+	//	//model.set_active(true);
+	//	//model2.set_active(false);
+	//}
+	//if (ga_button("Show Model 2", 20.0f, 300.0f, params).get_clicked(params))
+	//{
+	//	//cube.set_active(false);
+	//	//model.set_active(false);
+	//	//model2.set_active(true);
+	//}
 }
