@@ -289,3 +289,17 @@ void ga_csg::scale(ga_vec3f& t)
     _transform.data[1][1] = t.axes[1];
     _transform.data[2][2] = t.axes[2];
 }
+void ga_csg::extrude(ga_vec3f& dir, float& amt) {
+    ga_vec3f s = { 1.0f,1.0f,1.0f };    // keep all the other dimensions intact
+    s += dir.scale_result(amt - 1);     // s then = {5,1,1}
+    ga_vec3f currentLengthInDimension = { abs(dir.x) > 0 ? _transform.data[0][0] : 0.0,
+                                          abs(dir.y) > 0 ? _transform.data[1][1] : 0.0,
+                                          abs(dir.z) > 0 ? _transform.data[2][2] : 0.0 };
+    _transform.data[0][0] *= s.axes[0]; // do this for ALL axes
+    _transform.data[1][1] *= s.axes[1]; // do this for ALL axes
+    _transform.data[2][2] *= s.axes[2]; // do this for ALL axes
+    // Move object by a factor of q(adding to previous pos) 
+    // To maintain a similar position to where it was prior to scaling
+    ga_vec3f q = currentLengthInDimension.scale_result((0.5) * (amt - 1.0));
+    _transform.set_translation(_transform.get_translation() + q);
+}

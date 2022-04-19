@@ -76,7 +76,7 @@ public:
 	void set_color(ga_vec3f& col) { _color = col; _material->set_color(col); };
 	void translate(ga_vec3f& t);
 	void scale(ga_vec3f& t);
-	void extrude(ga_vec3f& t); // TODO: Implement
+	void extrude(ga_vec3f& dir, float& amt);
 
 
 private:

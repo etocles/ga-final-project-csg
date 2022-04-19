@@ -32,6 +32,7 @@ public:
 
 	void set_pos(ga_vec3f t) { _csg->translate(t); }
 	void set_scale(ga_vec3f t) { _csg->scale(t); }
+	void do_extrude(ga_vec3f t, float amt) { _csg->extrude(t,amt); }
 	ga_csg* get_csg() { return _csg; };
 
 private:

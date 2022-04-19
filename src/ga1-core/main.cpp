@@ -131,7 +131,7 @@ int main(int argc, const char** argv)
 		sim->late_update(&params);
 
 		// Run gui test.
-		gui_test(&params, &my_csg, csg_cube1);
+		gui_test(&params, &my_csg, csg1);
 
 		// Draw to screen.
 		output->update(&params);
@@ -181,8 +181,10 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 
 	if (ga_button("Extrude Cube1", 20.0f, 100.0f, params).get_clicked(params))
 	{
-		current_scale += {0.1f, 0.0f, 0.0f};
-		ref.set_scale(current_scale);
+		/*current_scale += {0.1f, 0.0f, 0.0f};
+		ref.set_scale(current_scale);*/
+
+		ref.do_extrude({ 1.0f,0.0f,0.0f }, 3.0f);
 	}
 	if (ga_button("Add a cube", 20.0f, 150.0f, params).get_clicked(params))
 	{
