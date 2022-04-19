@@ -186,7 +186,10 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 	}
 	if (ga_button("Add a cube", 20.0f, 150.0f, params).get_clicked(params))
 	{
-		temp = new ga_csg_component(ent, ga_csg::Shape::CUBE, { 2.0f,0.0f,4.0f });
+		float xpos = fmodf(rand(), 5.0f);
+		float ypos = fmodf(rand(), 5.0f);
+		float zpos = fmodf(rand(), 5.0f);
+		temp = new ga_csg_component(ent, ga_csg::Shape::CUBE, { xpos,ypos,zpos });
 	}
 	//if (ga_button("Show Model 2", 20.0f, 300.0f, params).get_clicked(params))
 	//{
