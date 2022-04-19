@@ -226,35 +226,35 @@ ga_csg ga_csg::Cube() {
 
     std::vector<ga_vec3f> vertices = {
         // Front
-        {-1.0, -1.0,  1.0},
-        { 1.0, -1.0,  1.0},
-        { 1.0,  1.0,  1.0},
-        {-1.0,  1.0,  1.0},
+        {-0.5, -0.5,  0.5},
+        { 0.5, -0.5,  0.5},
+        { 0.5,  0.5,  0.5},
+        {-0.5,  0.5,  0.5},
         // Top
-        {-1.0,  1.0,  1.0},
-        { 1.0,  1.0,  1.0},
-        { 1.0,  1.0, -1.0},
-        {-1.0,  1.0, -1.0},
+        {-0.5,  0.5,  0.5},
+        { 0.5,  0.5,  0.5},
+        { 0.5,  0.5, -0.5},
+        {-0.5,  0.5, -0.5},
         // Back
-        { 1.0, -1.0, -1.0},
-        {-1.0, -1.0, -1.0},
-        {-1.0,  1.0, -1.0},
-        { 1.0,  1.0, -1.0},
+        { 0.5, -0.5, -0.5},
+        {-0.5, -0.5, -0.5},
+        {-0.5,  0.5, -0.5},
+        { 0.5,  0.5, -0.5},
          // Bottom
-        { -1.0, -1.0, -1.0},
-        {  1.0, -1.0, -1.0},
-        {  1.0, -1.0,  1.0},
-        { -1.0, -1.0,  1.0},
+        { -0.5, -0.5, -0.5},
+        {  0.5, -0.5, -0.5},
+        {  0.5, -0.5,  0.5},
+        { -0.5, -0.5,  0.5},
          // Left
-        { -1.0, -1.0, -1.0},
-        { -1.0, -1.0,  1.0},
-        { -1.0,  1.0,  1.0},
-        { -1.0,  1.0, -1.0},
+        { -0.5, -0.5, -0.5},
+        { -0.5, -0.5,  0.5},
+        { -0.5,  0.5,  0.5},
+        { -0.5,  0.5, -0.5},
          // Right
-        {  1.0, -1.0,  1.0},
-        {  1.0, -1.0, -1.0},
-        {  1.0,  1.0, -1.0},
-        {  1.0,  1.0,  1.0},
+        {  0.5, -0.5,  0.5},
+        {  0.5, -0.5, -0.5},
+        {  0.5,  0.5, -0.5},
+        {  0.5,  0.5,  0.5},
     };
 
     std::vector<ga_vec3f> norms = {
@@ -270,6 +270,78 @@ ga_csg ga_csg::Cube() {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < 4; j++) {
             vs.push_back(ga_csg_vertex(vertices[i+j], norms[i/4]));
+        }
+        polys.push_back(ga_polygon(vs));
+    }
+
+    ga_csg temp = ga_csg(polys);
+    return temp;
+}
+
+
+// Creates a unit cube, centered at the origin.
+ga_csg ga_csg::Pyramid() {
+    // what the csg will be made with
+    std::vector<ga_polygon> polys;
+
+    //for (int i = 0; i < temp.size(); i++) {
+    //    std::vector<ga_csg_vertex> vs;
+    //    for (int j = 0; j < 4; j++) {
+    //        ga_vec3f pos;
+    //        pos.x = center.x + radius.axes[0] * (2 * !!((int)temp[i].ind.x & 1) - 1);
+    //        pos.y = center.y + radius.axes[1] * (2 * !!((int)temp[i].ind.y & 2) - 1);
+    //        pos.z = center.z + radius.axes[2] * (2 * !!((int)temp[i].ind.z & 4) - 1);
+    //        vs.push_back(ga_csg_vertex(pos, temp[i].norm));
+    //    }
+    //    polys.push_back(ga_polygon(vs));
+    //}
+
+    std::vector<ga_vec3f> vertices = {
+        // Front
+        {-1.0, -1.0,  1.0},
+        { 1.0, -1.0,  1.0},
+        { 1.0,  1.0,  1.0},
+        {-1.0,  1.0,  1.0},
+        // Top
+        {-1.0,  1.0,  1.0},
+        { 1.0,  1.0,  1.0},
+        { 1.0,  1.0, -1.0},
+        {-1.0,  1.0, -1.0},
+        // Back
+        { 1.0, -1.0, -1.0},
+        {-1.0, -1.0, -1.0},
+        {-1.0,  1.0, -1.0},
+        { 1.0,  1.0, -1.0},
+        // Bottom
+       { -1.0, -1.0, -1.0},
+       {  1.0, -1.0, -1.0},
+       {  1.0, -1.0,  1.0},
+       { -1.0, -1.0,  1.0},
+       // Left
+      { -1.0, -1.0, -1.0},
+      { -1.0, -1.0,  1.0},
+      { -1.0,  1.0,  1.0},
+      { -1.0,  1.0, -1.0},
+      // Right
+     {  1.0, -1.0,  1.0},
+     {  1.0, -1.0, -1.0},
+     {  1.0,  1.0, -1.0},
+     {  1.0,  1.0,  1.0},
+    };
+
+    std::vector<ga_vec3f> norms = {
+        {0, 0, +1}, // Front
+        {0, -1, 0}, // Top
+        {0, 0, -1}, // Back
+        {0, -1, 0}, // Bottom
+        {-1, 0, 0}, // Left
+        {+1, 0, 0}  // Right
+    };
+
+    for (int i = 0; i < vertices.size(); i += 4) {
+        std::vector<ga_csg_vertex> vs;
+        for (int j = 0; j < 4; j++) {
+            vs.push_back(ga_csg_vertex(vertices[i + j], norms[i / 4]));
         }
         polys.push_back(ga_polygon(vs));
     }
@@ -303,3 +375,5 @@ void ga_csg::extrude(ga_vec3f& dir, float& amt) {
     ga_vec3f q = currentLengthInDimension.scale_result((0.5) * (amt - 1.0));
     _transform.set_translation(_transform.get_translation() + q);
 }
+
+
