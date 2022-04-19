@@ -26,6 +26,7 @@ class ga_csg
 {
 public:
 	static enum class Shape { CUBE, SPHERE, PYRAMID };
+	static enum class OP { ADD, SUB, INTERSECT};
 
 	// TODO: Propogate these important assemblies into each constructor
 	ga_csg(Shape shp);

@@ -85,6 +85,7 @@ ga_csg ga_csg::add(ga_csg& other)
     a.build(b.all_polygons());
     ga_csg temp =  ga_csg(a.all_polygons());
     temp.set_color(ga_vec3f_lerp(_color, other._color, 0.5));
+    //temp._polygons = std::vector<ga_polygon>(temp._polygons.begin(), temp._polygons.begin() + temp._polygons.size()*0.2);
     temp.make_vao();
     return temp;
 }
