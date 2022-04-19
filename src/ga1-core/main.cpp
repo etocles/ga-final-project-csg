@@ -28,6 +28,7 @@
 #include "gui/ga_font.h"
 #include "gui/ga_label.h"
 #include "gui/ga_button.h"
+#include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -74,12 +75,12 @@ int main(int argc, const char** argv)
 
 	// Create a CSG entity 2
 	ga_entity csg_test_2;
-	ga_csg_component csg_cube2(&csg_test_2, ga_csg::Shape::CUBE, {1.0f,1.5f,0.0f}, { 1.0f,0.0f,0.0f });
+	ga_csg_component csg_cube2(&csg_test_2, ga_csg::Shape::CUBE, {0.5f,0.5f,0.0f}, { 1.0f,0.0f,0.0f });
 	sim->add_entity(&csg_test_2);
 
 	// Create a CSG entity 3
 	ga_entity csg_test_3;
-	ga_csg_component csg_cube3(&csg_test_3, ga_csg::Shape::CUBE, { 0.5f,1.0f,1.0f }, { 0.0f,1.0f,0.0f });
+	ga_csg_component csg_cube3(&csg_test_3, ga_csg::Shape::CUBE, { 0.25f,0.25f,0.5f }, { 0.0f,1.0f,0.0f });
 	sim->add_entity(&csg_test_3);
 
 	// Create a combination of the two
@@ -91,9 +92,9 @@ int main(int argc, const char** argv)
 	ga_csg_component csg_COMBINE2(&csg_test_COMBO2, *csg_COMBINE.get_csg(), *csg_cube3.get_csg());
 	csg_COMBINE2.set_pos({ 6.0f,1.0f,0.0f });
 	csg_COMBINE.set_pos({ -1.0f,1.0f,0.0f });
-	csg_cube1.set_pos({ -4.5f,1.0f,0.0f });
-	csg_cube2.set_pos({ -3.5f,2.5f,0.0f });
-	csg_cube3.set_pos({ 3.0f,2.0f,1.0f });
+	csg_cube1.set_pos({ -4.0f,1.0f,0.0f });
+	csg_cube2.set_pos({ -3.5f,1.5f,0.0f });
+	csg_cube3.set_pos({ 3.0f,1.25f,0.5f });
 	sim->add_entity(&csg_test_COMBO2);
 
 
@@ -179,12 +180,30 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 	ga_label("CSG Demo", 10, 20, params);
 
 
+	if (ga_button("Scale Cube1", 20.0f, 50.0f, params).get_clicked(params))
+	{
+		current_scale += {0.1f, 0.0f, 0.0f};
+		ref.set_scale(current_scale);
+	}
 	if (ga_button("Extrude Cube1", 20.0f, 100.0f, params).get_clicked(params))
 	{
 		/*current_scale += {0.1f, 0.0f, 0.0f};
 		ref.set_scale(current_scale);*/
 
 		ref.do_extrude({ 1.0f,0.0f,0.0f }, 3.0f);
+	/*	ga_vec3f cur_pos = ref.get_csg()->_transform.get_translation();
+		ga_vec3f cur_scale = { ref.get_csg()->_transform.data[0][0],
+							   ref.get_csg()->_transform.data[1][1],
+							   ref.get_csg()->_transform.data[2][2] };
+		std::cout << "Current Pos: "
+			<< "\n\tx : " << cur_pos.x
+			<< "\n\ty : " << cur_pos.y
+			<< "\n\tz : " << cur_pos.z << std::endl
+			<< "Current Scale: "
+			<< "\n\tx : " << cur_scale.x
+			<< "\n\ty : " << cur_scale.y
+			<< "\n\tz : " << cur_scale.z << std::endl << std::endl;*/
+ 			
 	}
 	if (ga_button("Add a cube", 20.0f, 150.0f, params).get_clicked(params))
 	{
@@ -192,6 +211,12 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 		float ypos = fmodf(rand(), 5.0f);
 		float zpos = fmodf(rand(), 5.0f);
 		temp = new ga_csg_component(ent, ga_csg::Shape::CUBE, { xpos,ypos,zpos });
+	}if (ga_button("Add a pyramid", 20.0f, 200.0f, params).get_clicked(params))
+	{
+		float xpos = fmodf(rand(), 5.0f);
+		float ypos = fmodf(rand(), 5.0f);
+		float zpos = fmodf(rand(), 5.0f);
+		temp = new ga_csg_component(ent, ga_csg::Shape::PYRAMID, { xpos,ypos,zpos });
 	}
 	//if (ga_button("Show Model 2", 20.0f, 300.0f, params).get_clicked(params))
 	//{

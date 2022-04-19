@@ -70,7 +70,7 @@ public:
 	ga_csg intersect(ga_csg& other);
 
 	ga_csg static Cube();
-	//ga_csg Sphere();
+	ga_csg Sphere();
 	ga_csg static Pyramid();
 
 	void set_color(ga_vec3f& col) { _color = col; _material->set_color(col); };

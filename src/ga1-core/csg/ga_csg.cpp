@@ -34,10 +34,10 @@ ga_csg::ga_csg(ga_csg::Shape shp) {
             _polygons = Cube()._polygons;
             break;
         case Shape::SPHERE:
-            //_polygons = Sphere()._polygons;
+            _polygons = Sphere()._polygons;
             break;
         case Shape::PYRAMID:
-            //_polygons = Pyramid()._polygons;
+            _polygons = Pyramid()._polygons;
             break;
     }
     default_values();
@@ -211,19 +211,6 @@ void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
 ga_csg ga_csg::Cube() {
     // what the csg will be made with
     std::vector<ga_polygon> polys;
-
-    //for (int i = 0; i < temp.size(); i++) {
-    //    std::vector<ga_csg_vertex> vs;
-    //    for (int j = 0; j < 4; j++) {
-    //        ga_vec3f pos;
-    //        pos.x = center.x + radius.axes[0] * (2 * !!((int)temp[i].ind.x & 1) - 1);
-    //        pos.y = center.y + radius.axes[1] * (2 * !!((int)temp[i].ind.y & 2) - 1);
-    //        pos.z = center.z + radius.axes[2] * (2 * !!((int)temp[i].ind.z & 4) - 1);
-    //        vs.push_back(ga_csg_vertex(pos, temp[i].norm));
-    //    }
-    //    polys.push_back(ga_polygon(vs));
-    //}
-
     std::vector<ga_vec3f> vertices = {
         // Front
         {-0.5, -0.5,  0.5},
@@ -256,7 +243,6 @@ ga_csg ga_csg::Cube() {
         {  0.5,  0.5, -0.5},
         {  0.5,  0.5,  0.5},
     };
-
     std::vector<ga_vec3f> norms = {
         {0, 0, +1}, // Front
         {0, -1, 0}, // Top
@@ -277,56 +263,111 @@ ga_csg ga_csg::Cube() {
     ga_csg temp = ga_csg(polys);
     return temp;
 }
-
-
-// Creates a unit cube, centered at the origin.
+// Creates a unit pyramid, centered at the origin.
 ga_csg ga_csg::Pyramid() {
     // what the csg will be made with
     std::vector<ga_polygon> polys;
+    std::vector<std::vector<ga_vec3f>> vertgroups = {
+        // Bottom
+        std::vector<ga_vec3f>({
+            { -0.5, -0.5, -0.5},
+            {  0.5, -0.5, -0.5},
+            {  0.5, -0.5,  0.5},
+            { -0.5, -0.5,  0.5}
+        }),
+        // Front
+        std::vector<ga_vec3f>({
+            { 0.0, 0.5, 0.0},
+            {  0.5, -0.5,  0.5},
+            { -0.5, -0.5,  0.5}
+        }),
+        // Back
+        std::vector<ga_vec3f>({
+            { 0.0, 0.5, 0.0},
+            { -0.5, -0.5, -0.5},
+            {  0.5, -0.5, -0.5}
+        }),
+        // Left
+        std::vector<ga_vec3f>({
+            { 0.0, 0.5, 0.0},
+            { -0.5, -0.5,  0.5},
+            { -0.5, -0.5, -0.5}
+        }),
+        // Right
+        std::vector<ga_vec3f>({
+            { 0.0, 0.5, 0.0},
+            {  0.5, -0.5,  0.5},
+            {  0.5, -0.5, -0.5}
+        }),
+    };
 
-    //for (int i = 0; i < temp.size(); i++) {
-    //    std::vector<ga_csg_vertex> vs;
-    //    for (int j = 0; j < 4; j++) {
-    //        ga_vec3f pos;
-    //        pos.x = center.x + radius.axes[0] * (2 * !!((int)temp[i].ind.x & 1) - 1);
-    //        pos.y = center.y + radius.axes[1] * (2 * !!((int)temp[i].ind.y & 2) - 1);
-    //        pos.z = center.z + radius.axes[2] * (2 * !!((int)temp[i].ind.z & 4) - 1);
-    //        vs.push_back(ga_csg_vertex(pos, temp[i].norm));
-    //    }
-    //    polys.push_back(ga_polygon(vs));
-    //}
+    std::vector<ga_vec3f> norms = {
+        {0, -1, 0}, // Bottom
+        {0, -1, 0}, // Bottom
+        {0, -1, 0}, // Bottom
+        {0, -1, 0}, // Bottom
+        {0, 0, +1}, // Front    ~
+        {0, 0, +1}, // Front    ~
+        {0, 0, +1}, // Front    ~
+        {0, 0, -1}, // Back     ~  
+        {0, 0, -1}, // Back     ~  
+        {0, 0, -1}, // Back     ~  
+        {-1, 0, 0}, // Left     ~
+        {-1, 0, 0}, // Left     ~
+        {-1, 0, 0}, // Left     ~
+        {+1, 0, 0}, // Right    ~
+        {+1, 0, 0}, // Right    ~
+        {+1, 0, 0}  // Right    ~
+    };
+
+    for (int i = 0; i < vertgroups.size(); i += 4) {
+        std::vector<ga_csg_vertex> vs;
+        for (int j = 0; j < vertgroups[i].size(); j++) {
+            vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i+j]));
+        }
+        polys.push_back(ga_polygon(vs));
+    }
+
+    ga_csg temp = ga_csg(polys);
+    return temp;
+}
+// Creates a unit sphere, centered at the origin.
+// TODO: Implement, rn still makes a cube
+ga_csg ga_csg::Sphere() {
+    // what the csg will be made with
+    std::vector<ga_polygon> polys;
 
     std::vector<ga_vec3f> vertices = {
         // Front
-        {-1.0, -1.0,  1.0},
-        { 1.0, -1.0,  1.0},
-        { 1.0,  1.0,  1.0},
-        {-1.0,  1.0,  1.0},
+        {-0.5, -0.5,  0.5},
+        { 0.5, -0.5,  0.5},
+        { 0.5,  0.5,  0.5},
+        {-0.5,  0.5,  0.5},
         // Top
-        {-1.0,  1.0,  1.0},
-        { 1.0,  1.0,  1.0},
-        { 1.0,  1.0, -1.0},
-        {-1.0,  1.0, -1.0},
+        {-0.5,  0.5,  0.5},
+        { 0.5,  0.5,  0.5},
+        { 0.5,  0.5, -0.5},
+        {-0.5,  0.5, -0.5},
         // Back
-        { 1.0, -1.0, -1.0},
-        {-1.0, -1.0, -1.0},
-        {-1.0,  1.0, -1.0},
-        { 1.0,  1.0, -1.0},
+        { 0.5, -0.5, -0.5},
+        {-0.5, -0.5, -0.5},
+        {-0.5,  0.5, -0.5},
+        { 0.5,  0.5, -0.5},
         // Bottom
-       { -1.0, -1.0, -1.0},
-       {  1.0, -1.0, -1.0},
-       {  1.0, -1.0,  1.0},
-       { -1.0, -1.0,  1.0},
+       { -0.5, -0.5, -0.5},
+       {  0.5, -0.5, -0.5},
+       {  0.5, -0.5,  0.5},
+       { -0.5, -0.5,  0.5},
        // Left
-      { -1.0, -1.0, -1.0},
-      { -1.0, -1.0,  1.0},
-      { -1.0,  1.0,  1.0},
-      { -1.0,  1.0, -1.0},
+      { -0.5, -0.5, -0.5},
+      { -0.5, -0.5,  0.5},
+      { -0.5,  0.5,  0.5},
+      { -0.5,  0.5, -0.5},
       // Right
-     {  1.0, -1.0,  1.0},
-     {  1.0, -1.0, -1.0},
-     {  1.0,  1.0, -1.0},
-     {  1.0,  1.0,  1.0},
+     {  0.5, -0.5,  0.5},
+     {  0.5, -0.5, -0.5},
+     {  0.5,  0.5, -0.5},
+     {  0.5,  0.5,  0.5},
     };
 
     std::vector<ga_vec3f> norms = {
@@ -363,7 +404,7 @@ void ga_csg::scale(ga_vec3f& t)
 }
 void ga_csg::extrude(ga_vec3f& dir, float& amt) {
     ga_vec3f s = { 1.0f,1.0f,1.0f };    // keep all the other dimensions intact
-    s += dir.scale_result(amt - 1);     // s then = {5,1,1}
+    s += dir.scale_result(amt - 1);
     ga_vec3f currentLengthInDimension = { abs(dir.x) > 0 ? _transform.data[0][0] : 0.0,
                                           abs(dir.y) > 0 ? _transform.data[1][1] : 0.0,
                                           abs(dir.z) > 0 ? _transform.data[2][2] : 0.0 };
