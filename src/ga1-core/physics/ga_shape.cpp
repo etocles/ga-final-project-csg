@@ -27,14 +27,14 @@ void ga_plane::get_debug_draw(const ga_mat4f& transform, ga_dynamic_drawcall* dr
 	ga_vec3f vec1 = ga_vec3f_cross(_normal, perp).normal();
 	ga_vec3f vec2 = ga_vec3f_cross(_normal, vec1).normal();
 
-	const float k_plane_size = 10.0f;
+	const float k_plane_size = 20.0f;
 	vec1.scale(k_plane_size);
 	vec2.scale(k_plane_size);
 
-	drawcall->_positions.push_back(-vec1 - vec2);
-	drawcall->_positions.push_back(-vec1 + vec2);
-	drawcall->_positions.push_back(vec1 + vec2);
-	drawcall->_positions.push_back(vec1 - vec2);
+	drawcall->_positions.push_back(position - vec1 - vec2);
+	drawcall->_positions.push_back(position - vec1 + vec2);
+	drawcall->_positions.push_back(position + vec1 + vec2);
+	drawcall->_positions.push_back(position + vec1 - vec2);
 
 	uint32_t indices[] =
 	{

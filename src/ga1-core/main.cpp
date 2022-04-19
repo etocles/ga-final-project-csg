@@ -95,10 +95,16 @@ int main(int argc, const char** argv)
 	csg_cube3.set_pos({ 3.0f,2.0f,1.0f });
 	sim->add_entity(&csg_test_COMBO2);
 
+
+	ga_entity my_csg;
+	ga_csg_component csg1(&my_csg, ga_csg::Shape::CUBE);
+	csg1.set_pos({ 0.0f,0.0f,4.0f });
+	sim->add_entity(&my_csg);
+
 	ga_entity floor;
 	ga_plane floor_plane;
 	ga_physics_component floor_collider(&floor, &floor_plane, 0.0f);
-	floor_plane._point = { 0.0f, 0.0f, 0.0f };
+	floor_plane._point = { 0.0f, -1.0f, 0.0f };
 	floor_plane._normal = { 0.0f, 1.0f, 0.0f };
 	sim->add_entity(&floor);
 
