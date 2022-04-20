@@ -78,6 +78,9 @@ public:
 	void scale(ga_vec3f& t);
 	void extrude(ga_vec3f& dir, float& amt);
 
+	ga_mat4f get_transform() { return _transform; };
+	ga_csg_material* get_material() { return _material; };
+
 
 private:
 	uint32_t make_vao();

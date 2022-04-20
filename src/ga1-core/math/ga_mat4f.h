@@ -51,6 +51,13 @@ struct ga_mat4f
 	void scale(float s);
 
 	/*
+	** Get the translation portion of the matrix.
+	**
+	** The fourth column of the matrix.
+	*/
+	ga_vec3f get_scale() const;
+
+	/*
 	** Apply rotation to the given matrix.
 	*/
 	void rotate(const ga_quatf& __restrict q);

@@ -43,7 +43,6 @@
 ga_font* g_font = nullptr;
 static void set_root_path(const char* exepath);
 static void gui_test(ga_frame_params* params, ga_entity* ent);
-ga_vec3f current_scale = { 1.0f,1.0f,1.0f };
 std::vector<ga_csg_component*> csg_objs;
 int selected_index = -1;
 
@@ -242,25 +241,29 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 
 
 	// Scale Functions
+	ga_vec3f current;
 	for (int i = 0; i < mods.size(); i++) {
-		if (ga_button(mods[i], 20.0f + i*30.0f, 170.0f, params).get_clicked(params))
+		if (ga_button(mods[i], 20.0f + i*30.0f, 170.0f, params).get_pressed(params))
 		{
-			current_scale += mod_dirs[i].scale_result(amt);
-			selected->set_scale(current_scale);
+			current = selected->get_csg()->get_transform().get_scale();
+			current += mod_dirs[i].scale_result(amt);
+			selected->set_scale(current);
 		}
 	}
 	// Extrude Functions
 	for (int i = 0; i < mods.size(); i++) {
-		if (ga_button(mods[i], 20.0f + i*30.0f, 220.0f, params).get_clicked(params))
+		if (ga_button(mods[i], 20.0f + i*30.0f, 220.0f, params).get_pressed(params))
 		{
 			selected->do_extrude(mod_dirs[i], amt);
 		}
 	}
 	// Move Functions
 	for (int i = 0; i < mods.size(); i++) {
-		if (ga_button(mods[i], 20.0f + i*30.0f, 270.0f, params).get_clicked(params))
+		if (ga_button(mods[i], 20.0f + i*30.0f, 270.0f, params).get_pressed(params))
 		{
-			selected->set_pos(mod_dirs[i]);
+			current = selected->get_csg()->get_transform().get_translation();
+			current += mod_dirs[i].scale_result(amt);
+			selected->set_pos(current);
 		}
 	}
 	

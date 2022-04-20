@@ -74,6 +74,11 @@ void ga_mat4f::scale(float s)
 	(*this) *= tmp;
 }
 
+ga_vec3f ga_mat4f::get_scale() const
+{
+	return { data[0][0], data[1][1], data[2][2] };
+}
+
 void ga_mat4f::rotate(const ga_quatf& __restrict q)
 {
 	ga_mat4f tmp;
