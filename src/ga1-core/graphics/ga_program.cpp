@@ -24,6 +24,11 @@ void ga_uniform::set(const ga_vec3f& vec)
 	glUniform3fv(_location, 1, vec.axes);
 }
 
+void ga_uniform::set(const bool& val)
+{
+	glUniform1i(_location, val);
+}
+
 void ga_uniform::set(const ga_mat4f& mat)
 {
 	glUniformMatrix4fv(_location, 1, GL_TRUE, (const GLfloat*)mat.data);

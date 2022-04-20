@@ -252,11 +252,13 @@ void ga_csg_material::bind(const ga_mat4f& view_proj, const ga_mat4f& transform)
 {
 	ga_uniform mvp_uniform = _program->get_uniform("u_mvp");
 	ga_uniform color_uniform = _program->get_uniform("u_color");
+	ga_uniform highlight_uniform = _program->get_uniform("u_highlighted");
 
 	_program->use();
 
 	mvp_uniform.set(_csg_transform * transform * view_proj);
 	color_uniform.set(_color);
+	highlight_uniform.set(_highlighted);
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);

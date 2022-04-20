@@ -202,6 +202,10 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		{
 			hovered = csg_objs[i]->name;
 			// highlight the actual selected object via shader TODO:
+			csg_objs[i]->get_csg()->get_material()->set_highlight(true);
+		}
+		else {
+			csg_objs[i]->get_csg()->get_material()->set_highlight(false);
 		}
 		if (temp.get_clicked(params))
 		{
