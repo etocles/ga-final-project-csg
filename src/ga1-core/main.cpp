@@ -196,6 +196,7 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	const float amt = 0.1f;
 
 
+
 	// GUI Component initializations
 	ga_label title =  ga_label("CSG Demo", 10, 20, params);
 	ga_button add_cube_button = ga_button("Add Cube", 20.0f, 700.0f, params);
@@ -261,16 +262,16 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		selected->get_csg()->get_material()->set_highlight(true);
 
 
-		ga_label scale_label = ga_label(("Scale " + selected->name).c_str(), 20.0f, 150.0f, params);
-		ga_label extrd_label = ga_label(("Extrude " + selected->name).c_str(), 20.0f, 200.0f, params);
-		ga_label trans_label = ga_label(("Translate " + selected->name).c_str(), 20.0f, 250.0f, params);
-		ga_panel inspector = ga_panel(params, { 15,130 }, { 200, 280 });
+		ga_label scale_label = ga_label("Scale", 20.0f, 150.0f, params);
+		ga_label extrd_label = ga_label("Extrude", 20.0f, 200.0f, params);
+		ga_label trans_label = ga_label("Translate", 20.0f, 250.0f, params);
+		ga_panel inspector = ga_panel(params, { 15,135 }, { 200, 285 });
 
 
 		// Scale Functions
 		ga_vec3f current;
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 20.0f + i*30.0f, 170.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i*30.0f, 170.0f, params).get_pressed(params))
 			{
 				current = selected->get_csg()->get_transform().get_scale();
 				current += mod_dirs[i].scale_result(amt);
@@ -279,14 +280,14 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		}
 		// Extrude Functions
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 20.0f + i*30.0f, 220.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i*30.0f, 220.0f, params).get_pressed(params))
 			{
 				selected->do_extrude(mod_dirs[i], 1+amt);
 			}
 		}
 		// Move Functions
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 20.0f + i*30.0f, 270.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i*30.0f, 270.0f, params).get_pressed(params))
 			{
 				current = selected->get_csg()->get_transform().get_translation();
 				current += mod_dirs[i].scale_result(amt);
@@ -296,20 +297,19 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	}
 	// if Secondary Object is selected
 	if (selected_index_2 >= 0 && selected_index_2 != selected_index) {
-		ga_label(("Object #2 Selected: " + selected2->name + std::to_string(selected_index_2)).c_str(), 10, 300, params);
+		ga_label(("Object #2 Selected: " + selected2->name + std::to_string(selected_index_2)).c_str(), 10, 320, params);
 		selected2->get_csg()->get_material()->set_highlight(true);
 
-
-		ga_label scale_label = ga_label(("Scale " + selected->name).c_str(), 20.0f, 330.0f, params);
-		ga_label extrd_label = ga_label(("Extrude " + selected->name).c_str(), 20.0f, 380.0f, params);
-		ga_label trans_label = ga_label(("Translate " + selected->name).c_str(), 20.0f, 430.0f, params);
-		ga_panel inspector = ga_panel(params, { 15,310 }, { 200, 460 });
+		ga_label scale_label = ga_label("Scale", 20.0f, 350.0f, params);
+		ga_label extrd_label = ga_label("Extrude", 20.0f, 400.0f, params);
+		ga_label trans_label = ga_label("Translate", 20.0f, 450.0f, params);
+		ga_panel inspector = ga_panel(params, { 15,335 }, { 200, 485 });
 
 
 		// Scale Functions
 		ga_vec3f current;
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 20.0f + i * 30.0f, 350.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i * 30.0f, 370.0f, params).get_pressed(params))
 			{
 				current = selected2->get_csg()->get_transform().get_scale();
 				current += mod_dirs[i].scale_result(amt);
@@ -318,14 +318,14 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		}
 		// Extrude Functions
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 20.0f + i * 30.0f, 400.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i * 30.0f, 420.0f, params).get_pressed(params))
 			{
 				selected2->do_extrude(mod_dirs[i], 1+amt);
 			}
 		}
 		// Move Functions
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 20.0f + i * 30.0f, 450.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i * 30.0f, 470.0f, params).get_pressed(params))
 			{
 				current = selected2->get_csg()->get_transform().get_translation();
 				current += mod_dirs[i].scale_result(amt);
@@ -337,8 +337,23 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	// If there is a selection on both fronts, allow union, sub, and intersect operations
 	if (!(selected_index >= 0 && selected_index_2 >= 0 && selected_index_2 != selected_index)) return;
 
-	// TODO: Implement Add, Subtract, and Intersect options here
-	if (ga_button("Union", 20.0f, 600.0f, params).get_clicked(params)) {
-		csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));
+	
+	ga_label("Operations", 20, 580, params);
+	ga_panel inspector = ga_panel(params, { 15,590 }, { 240, 620 });
+	ga_button union_button = ga_button("Union", 20.0f, 610.0f, params);
+	ga_button sub_button = ga_button("Subtract", 75.0f, 610.0f, params);
+	ga_button intersect_button = ga_button("Intersect", 155.0f, 610.0f, params);
+	if (union_button.get_clicked(params)) {
+		ga_csg_component* temp = new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg());
+		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : selected->name;
+		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name;
+		temp->name = name1 + "+" + name2;
+		csg_objs.push_back(temp);
+	}
+	if (sub_button.get_clicked(params)) {
+		//csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));
+	}
+	if (intersect_button.get_clicked(params)) {
+		//csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));
 	}
 }
