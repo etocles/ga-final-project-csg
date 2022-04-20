@@ -184,13 +184,25 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	// initializations
 	ga_csg_component* selected = (selected_index >= 0) ? csg_objs[selected_index] : NULL;
 	std::string hovered = "NONE";
+	std::vector<const char*> mods = { "+x","-x","+y","-y","+z","-z" };
+	std::vector<ga_vec3f> mod_dirs = { {1.0f,0.0f,0.0f}, //"+x",
+										{-1.0f,0.0f,0.0f}, //"-x",
+										{0.0f,1.0f,0.0f}, //"+y",
+										{0.0f,-1.0f,0.0f}, //"-y",
+										{0.0f,0.0f,1.0f}, //"+z",
+										{0.0f,0.0f,-1.0f} //"-z" 
+									};
+	const float amt = 0.1f;
+	// boundaries go here
+	// bounding box of inspector goes here
 
 	// SHOW ALL OF THE OBJECTS
 	for (int i = 0; i < csg_objs.size(); i++) {
 		ga_button temp = ga_button(std::to_string(i).c_str(), 20.0f + i *25.0f, 80.0f, params);
 		if (temp.get_hover(params))
 		{
-			hovered = "#" + std::to_string(i);
+			hovered = csg_objs[i]->name;
+			// highlight the actual selected object via shader TODO:
 		}
 		if (temp.get_clicked(params))
 		{
@@ -223,30 +235,33 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	if (selected_index < 0) return;
 	ga_label(("Object Selected: " + selected->name).c_str(), 10, 120, params);
 
-	if (ga_button(("Scale " + selected->name).c_str(), 20.0f, 150.0f, params).get_clicked(params))
-	{
-		current_scale += {0.1f, 0.0f, 0.0f};
-		selected->set_scale(current_scale);
-	}
-	if (ga_button(("Extrude " + selected->name).c_str(), 20.0f, 200.0f, params).get_clicked(params))
-	{
-		/*current_scale += {0.1f, 0.0f, 0.0f};
-		ref.set_scale(current_scale);*/
 
-		selected->do_extrude({ 1.0f,0.0f,0.0f }, 3.0f);
-	/*	ga_vec3f cur_pos = ref.get_csg()->_transform.get_translation();
-		ga_vec3f cur_scale = { ref.get_csg()->_transform.data[0][0],
-							   ref.get_csg()->_transform.data[1][1],
-							   ref.get_csg()->_transform.data[2][2] };
-		std::cout << "Current Pos: "
-			<< "\n\tx : " << cur_pos.x
-			<< "\n\ty : " << cur_pos.y
-			<< "\n\tz : " << cur_pos.z << std::endl
-			<< "Current Scale: "
-			<< "\n\tx : " << cur_scale.x
-			<< "\n\ty : " << cur_scale.y
-			<< "\n\tz : " << cur_scale.z << std::endl << std::endl;*/
- 			
+	ga_label scale_label = ga_label(("Scale " + selected->name).c_str(), 20.0f, 150.0f, params);
+	ga_label extrd_label = ga_label(("Extrude " + selected->name).c_str(), 20.0f, 200.0f, params);
+	ga_label trans_label = ga_label(("Translate " + selected->name).c_str(), 20.0f, 250.0f, params);
+
+
+	// Scale Functions
+	for (int i = 0; i < mods.size(); i++) {
+		if (ga_button(mods[i], 20.0f + i*30.0f, 170.0f, params).get_clicked(params))
+		{
+			current_scale += mod_dirs[i].scale_result(amt);
+			selected->set_scale(current_scale);
+		}
+	}
+	// Extrude Functions
+	for (int i = 0; i < mods.size(); i++) {
+		if (ga_button(mods[i], 20.0f + i*30.0f, 220.0f, params).get_clicked(params))
+		{
+			selected->do_extrude(mod_dirs[i], amt);
+		}
+	}
+	// Move Functions
+	for (int i = 0; i < mods.size(); i++) {
+		if (ga_button(mods[i], 20.0f + i*30.0f, 270.0f, params).get_clicked(params))
+		{
+			selected->set_pos(mod_dirs[i]);
+		}
 	}
 	
 }
