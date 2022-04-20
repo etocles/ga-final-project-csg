@@ -338,7 +338,7 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	if (!(selected_index >= 0 && selected_index_2 >= 0 && selected_index_2 != selected_index)) return;
 
 	// TODO: Implement Add, Subtract, and Intersect options here
-	if (ga_button("Union Operation!", 20.0f, 600.0f, params).get_clicked(params)) {
-		std::cout << "Got Here" << std::endl;
+	if (ga_button("Union", 20.0f, 600.0f, params).get_clicked(params)) {
+		csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));
 	}
 }
