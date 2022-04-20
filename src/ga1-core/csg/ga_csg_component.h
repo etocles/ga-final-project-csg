@@ -15,6 +15,7 @@
 #include "ga_csg.h"
 
 #include <cstdint>
+#include <string>
 
 /*
 ** A component that attaches to the viper engine in order to provide
@@ -35,6 +36,7 @@ public:
 	void do_extrude(ga_vec3f t, float amt) { _csg->extrude(t,amt); }
 	ga_csg* get_csg() { return _csg; };
 
+	std::string name;
 private:
 	ga_csg* _csg;
 };

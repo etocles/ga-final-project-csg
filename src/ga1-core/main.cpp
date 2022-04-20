@@ -42,9 +42,10 @@
 
 ga_font* g_font = nullptr;
 static void set_root_path(const char* exepath);
-static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& ref);
+static void gui_test(ga_frame_params* params, ga_entity* ent);
 ga_vec3f current_scale = { 1.0f,1.0f,1.0f };
-ga_csg_component* temp;
+std::vector<ga_csg_component*> csg_objs;
+int selected_index = -1;
 
 int main(int argc, const char** argv)
 {
@@ -101,6 +102,7 @@ int main(int argc, const char** argv)
 	ga_entity my_csg;
 	ga_csg_component csg1(&my_csg, ga_csg::Shape::CUBE);
 	csg1.set_pos({ 0.0f,0.0f,4.0f });
+	csg_objs.push_back(&csg1);
 	sim->add_entity(&my_csg);
 
 	ga_entity floor;
@@ -132,7 +134,7 @@ int main(int argc, const char** argv)
 		sim->late_update(&params);
 
 		// Run gui test.
-		gui_test(&params, &my_csg, csg1);
+		gui_test(&params, &my_csg);
 
 		// Draw to screen.
 		output->update(&params);
@@ -175,21 +177,63 @@ static void set_root_path(const char* exepath)
 #endif
 }
 
-static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& ref)
+static void gui_test(ga_frame_params* params, ga_entity* ent)
 {
 	ga_label("CSG Demo", 10, 20, params);
 
-	if (ga_button("Scale Cube1", 20.0f, 50.0f, params).get_clicked(params))
+	// initializations
+	ga_csg_component* selected = (selected_index >= 0) ? csg_objs[selected_index] : NULL;
+	std::string hovered = "NONE";
+
+	// SHOW ALL OF THE OBJECTS
+	for (int i = 0; i < csg_objs.size(); i++) {
+		ga_button temp = ga_button(std::to_string(i).c_str(), 20.0f + i *25.0f, 80.0f, params);
+		if (temp.get_hover(params))
+		{
+			hovered = "#" + std::to_string(i);
+		}
+		if (temp.get_clicked(params))
+		{
+			selected_index = i;
+			selected = csg_objs[i];
+		}
+	}
+	
+	// DISPLAY CSG OBJECT HEADER 
+	if (hovered != "NONE") ga_label(("CSG Objs (" + hovered + ")").c_str(), 10, 50, params);
+	else ga_label("CSG Objs", 10, 50, params);
+
+
+
+	// ALWAYS MAINTAIN FUNCTIONALITY TO ADD MORE OBJECTS
+	if (ga_button("Add a cube", 20.0f, 350.0f, params).get_clicked(params))
+	{
+		float xpos = fmodf(rand(), 5.0f);
+		float ypos = fmodf(rand(), 5.0f);
+		float zpos = fmodf(rand(), 5.0f);
+		csg_objs.push_back(new ga_csg_component(ent, ga_csg::Shape::CUBE, { xpos,ypos,zpos }));
+	}if (ga_button("Add a pyramid", 20.0f, 400.0f, params).get_clicked(params))
+	{
+		float xpos = fmodf(rand(), 5.0f);
+		float ypos = fmodf(rand(), 5.0f);
+		float zpos = fmodf(rand(), 5.0f);
+		csg_objs.push_back(new ga_csg_component(ent, ga_csg::Shape::PYRAMID, { xpos,ypos,zpos }));
+	}
+
+	if (selected_index < 0) return;
+	ga_label(("Object Selected: " + selected->name).c_str(), 10, 120, params);
+
+	if (ga_button(("Scale " + selected->name).c_str(), 20.0f, 150.0f, params).get_clicked(params))
 	{
 		current_scale += {0.1f, 0.0f, 0.0f};
-		ref.set_scale(current_scale);
+		selected->set_scale(current_scale);
 	}
-	if (ga_button("Extrude Cube1", 20.0f, 100.0f, params).get_clicked(params))
+	if (ga_button(("Extrude " + selected->name).c_str(), 20.0f, 200.0f, params).get_clicked(params))
 	{
 		/*current_scale += {0.1f, 0.0f, 0.0f};
 		ref.set_scale(current_scale);*/
 
-		ref.do_extrude({ 1.0f,0.0f,0.0f }, 3.0f);
+		selected->do_extrude({ 1.0f,0.0f,0.0f }, 3.0f);
 	/*	ga_vec3f cur_pos = ref.get_csg()->_transform.get_translation();
 		ga_vec3f cur_scale = { ref.get_csg()->_transform.data[0][0],
 							   ref.get_csg()->_transform.data[1][1],
@@ -204,17 +248,5 @@ static void gui_test(ga_frame_params* params, ga_entity* ent, ga_csg_component& 
 			<< "\n\tz : " << cur_scale.z << std::endl << std::endl;*/
  			
 	}
-	if (ga_button("Add a cube", 20.0f, 150.0f, params).get_clicked(params))
-	{
-		float xpos = fmodf(rand(), 5.0f);
-		float ypos = fmodf(rand(), 5.0f);
-		float zpos = fmodf(rand(), 5.0f);
-		temp = new ga_csg_component(ent, ga_csg::Shape::CUBE, { xpos,ypos,zpos });
-	}if (ga_button("Add a pyramid", 20.0f, 200.0f, params).get_clicked(params))
-	{
-		float xpos = fmodf(rand(), 5.0f);
-		float ypos = fmodf(rand(), 5.0f);
-		float zpos = fmodf(rand(), 5.0f);
-		temp = new ga_csg_component(ent, ga_csg::Shape::PYRAMID, { xpos,ypos,zpos });
-	}
+	
 }

@@ -14,6 +14,7 @@ ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg::Shape which_sha
     _csg = new ga_csg(which_shape);
     _csg->translate(translation);
     _csg->set_color(color);
+    name = (which_shape == ga_csg::Shape::CUBE) ? "Cube" : "Pyramid";
 }
 
 ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg& csg1, ga_csg& csg2) : ga_component(ent) {
