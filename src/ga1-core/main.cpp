@@ -45,6 +45,7 @@ static void set_root_path(const char* exepath);
 static void gui_test(ga_frame_params* params, ga_entity* ent);
 std::vector<ga_csg_component*> csg_objs;
 int selected_index = -1;
+int selected_index_2 = -1;
 
 int main(int argc, const char** argv)
 {
@@ -182,6 +183,7 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 
 	// initializations
 	ga_csg_component* selected = (selected_index >= 0) ? csg_objs[selected_index] : NULL;
+	ga_csg_component* selected2 = (selected_index_2 >= 0) ? csg_objs[selected_index_2] : NULL;
 	std::string hovered = "NONE";
 	std::vector<const char*> mods = { "+x","-x","+y","-y","+z","-z" };
 	std::vector<ga_vec3f> mod_dirs = { {1.0f,0.0f,0.0f}, //"+x",
@@ -198,19 +200,34 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	// SHOW ALL OF THE OBJECTS
 	for (int i = 0; i < csg_objs.size(); i++) {
 		ga_button temp = ga_button(std::to_string(i).c_str(), 20.0f + i *25.0f, 80.0f, params);
+
+		// if hovered, highlight and inform user
 		if (temp.get_hover(params))
 		{
 			hovered = csg_objs[i]->name;
-			// highlight the actual selected object via shader TODO:
+			// highlight the actual selected object via shader
 			csg_objs[i]->get_csg()->get_material()->set_highlight(true);
 		}
 		else {
+			// unhighlight self if not being hovered
 			csg_objs[i]->get_csg()->get_material()->set_highlight(false);
 		}
+
+		// if clicked, check what kind of click
 		if (temp.get_clicked(params))
 		{
-			selected_index = i;
-			selected = csg_objs[i];
+			// if right click
+			if (params->_mouse_click_mask > 2) {
+				selected_index_2 = i;
+				selected2 = csg_objs[i];
+				std::cout << "FIr!!ed " << i << " selected: " << selected_index  << " selected2: " << selected_index_2<< std::endl;
+			}
+			// if left mouse click
+			else {
+				selected_index = i;
+				selected = csg_objs[i];
+				std::cout<<"FIred " << i << " selected: " << selected_index << " selected2: " << selected_index_2 << std::endl;
+			}
 		}
 	}
 	
@@ -270,5 +287,11 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 			selected->set_pos(current);
 		}
 	}
-	
+
+	if (selected_index < 0 || selected_index_2 < 0) return;
+
+	// TODO: Implement Add, Subtract, and Intersect options here
+	if (ga_button("Union Operation!", 20.0f, 600.0f, params).get_clicked(params)) {
+		std::cout << "Got Here" << std::endl;
+	}
 }
