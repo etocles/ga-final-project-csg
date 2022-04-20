@@ -219,7 +219,6 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	else ga_label("CSG Objs", 10, 50, params);
 
 
-
 	// ALWAYS MAINTAIN FUNCTIONALITY TO ADD MORE OBJECTS
 	if (ga_button("Add a cube", 20.0f, 350.0f, params).get_clicked(params))
 	{
@@ -237,6 +236,7 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 
 	if (selected_index < 0) return;
 	ga_label(("Object Selected: " + selected->name).c_str(), 10, 120, params);
+	selected->get_csg()->get_material()->set_highlight(true);
 
 
 	ga_label scale_label = ga_label(("Scale " + selected->name).c_str(), 20.0f, 150.0f, params);
