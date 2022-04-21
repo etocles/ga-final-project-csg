@@ -224,13 +224,13 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 			if (params->_mouse_click_mask > 2) {
 				selected_index_2 = i;
 				selected2 = comp.get_csg(i);
-				std::cout << "FIr!!ed " << i << " selected: " << selected_index  << " selected2: " << selected_index_2<< std::endl;
+				//std::cout << "FIr!!ed " << i << " selected: " << selected_index  << " selected2: " << selected_index_2<< std::endl;
 			}
 			// if left mouse click
 			else {
 				selected_index = i;
 				selected = comp.get_csg(i);
-				std::cout<<"FIred " << i << " selected: " << selected_index << " selected2: " << selected_index_2 << std::endl;
+				//std::cout<<"FIred " << i << " selected: " << selected_index << " selected2: " << selected_index_2 << std::endl;
 			}
 		}
 	}
@@ -248,6 +248,8 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 		float zpos = fmodf(rand(), 5.0f);
 		ga_csg* temp = new ga_csg(ga_csg::Shape::CUBE);
 		temp->set_pos({ xpos,ypos,zpos });
+		temp->name = "Cube";
+		temp->id = comp.get_id();
 		comp.add(temp);
 	}
 	if (add_pyramid_button.get_clicked(params))
@@ -257,6 +259,8 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 		float zpos = fmodf(rand(), 5.0f);
 		ga_csg* temp = new ga_csg(ga_csg::Shape::PYRAMID);
 		temp->set_pos({ xpos,ypos,zpos });
+		temp->name = "Pyramid";
+		temp->id = comp.get_id();
 		comp.add(temp);
 	}
 

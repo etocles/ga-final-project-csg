@@ -28,6 +28,7 @@ public:
 	ga_csg_component(ga_entity* ent, ga_csg& csg1, ga_csg& csg2);
 	virtual ~ga_csg_component();
 	virtual void update(struct ga_frame_params* params) override;
+	virtual void late_update(struct ga_frame_params* params) override;
 
 	ga_csg* get_csg(int i = 0) { return _csgs[i]; };
 	void add(ga_csg* csg) { _csgs.push_back(csg); }
@@ -37,5 +38,6 @@ public:
 
 private:
 	std::vector<ga_csg*> _csgs;
+	int index_to_remove;
 	int nonce = 0;
 };

@@ -26,7 +26,7 @@ ga_csg_component::~ga_csg_component() {
 
 void ga_csg_component::update(ga_frame_params* params) {
     float dt = std::chrono::duration_cast<std::chrono::duration<float>>(params->_delta_time).count();
-
+    
     std::vector<ga_static_drawcall> draws;
     for (int i = 0; i < _csgs.size(); i++) {
         ga_static_drawcall draw;
@@ -45,9 +45,16 @@ void ga_csg_component::update(ga_frame_params* params) {
     params->_static_drawcall_lock.clear(std::memory_order_release);
 }
 
+void ga_csg_component::late_update(ga_frame_params* params)
+{
+    if (index_to_remove < 0) return;
+    _csgs.erase(_csgs.begin() + index_to_remove);
+    // Commented because the fiber workers do not have access to gl* Functions and this breaks the program
+    //delete _csgs[index]; 
+    index_to_remove = -1;
+}
+
 void ga_csg_component::remove(int i)
 {
-    delete _csgs[i];
-    _csgs.erase(_csgs.begin() + i);
-    return;
+    index_to_remove = i;
 }
