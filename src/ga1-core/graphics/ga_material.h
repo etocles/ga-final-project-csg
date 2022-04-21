@@ -113,12 +113,16 @@ public:
 	virtual void set_color(const ga_vec3f& color) override { _color = color; };
 
 	virtual void set_highlight(bool toggle) { _highlighted = toggle; };
+	virtual void set_selected(bool toggle) { _selected = toggle; };
+	virtual void set_secondary(bool toggle) { _secondary = toggle; };
 
 private:
 	ga_shader* _vs;
 	ga_shader* _fs;
 	ga_mat4f _csg_transform;
 	bool _highlighted = false;
+	bool _selected = false;
+	bool _secondary = false;
 	ga_program* _program;
 	ga_vec3f _color;
 };

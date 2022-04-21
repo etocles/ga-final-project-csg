@@ -204,17 +204,15 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 	// SHOW ALL OF THE OBJECTS
 	for (int i = 0; i < comp.size(); i++) {
 		ga_button temp = ga_button(std::to_string(i).c_str(), 20.0f + i *25.0f, 80.0f, params);
-
+		ga_csg* cur = comp.get_csg(i);
+		cur->get_material()->set_highlight(false);
+		cur->get_material()->set_selected(false);
 		// if hovered, highlight and inform user
 		if (temp.get_hover(params))
 		{
 			hovered = comp.get_csg(i)->name;
 			// highlight the actual selected object via shader
-			comp.get_csg(i)->get_material()->set_highlight(true);
-		}
-		else {
-			// unhighlight self if not being hovered
-			comp.get_csg(i)->get_material()->set_highlight(false);
+			cur->get_material()->set_highlight(true);
 		}
 
 		// if clicked, check what kind of click
@@ -223,13 +221,13 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 			// if right click
 			if (params->_mouse_click_mask > 2) {
 				selected_index_2 = i;
-				selected2 = comp.get_csg(i);
+				selected2 = comp.get_csg(selected_index_2);
 				//std::cout << "FIr!!ed " << i << " selected: " << selected_index  << " selected2: " << selected_index_2<< std::endl;
 			}
 			// if left mouse click
 			else {
 				selected_index = i;
-				selected = comp.get_csg(i);
+				selected = comp.get_csg(selected_index);
 				//std::cout<<"FIred " << i << " selected: " << selected_index << " selected2: " << selected_index_2 << std::endl;
 			}
 		}
@@ -267,7 +265,8 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 	// if Primary Object is selected
 	if (selected_index >= 0) {
 		ga_label(("Object #1 Selected: " + selected->name + std::to_string(selected_index)).c_str(), 10, 120.0f, params);
-		selected->get_material()->set_highlight(true);
+		selected->get_material()->set_selected(true);
+		selected->get_material()->set_secondary(false);
 
 
 		ga_label scale_label = ga_label("Scale", 20.0f, 150.0f, params);
@@ -313,7 +312,8 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 	// if Secondary Object is selected
 	if (selected_index_2 >= 0 && selected_index_2 != selected_index) {
 		ga_label(("Object #2 Selected: " + selected2->name + std::to_string(selected_index_2)).c_str(), 10, 320, params);
-		selected2->get_material()->set_highlight(true);
+		selected2->get_material()->set_selected(true);
+		selected2->get_material()->set_secondary(true);
 
 		ga_label scale_label = ga_label("Scale", 20.0f, 350.0f, params);
 		ga_label extrd_label = ga_label("Extrude", 20.0f, 400.0f, params);
