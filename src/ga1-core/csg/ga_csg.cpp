@@ -196,13 +196,6 @@ uint32_t ga_csg::make_vao()
     return _vao;
 }
 
-
-void ga_csg::assemble_drawcall(ga_static_drawcall& draw) {
-    draw._vao = _vao;
-    draw._index_count = _index_count;
-    draw._material = _material;
-}
-
 #pragma endregion
 
 #pragma region SHAPES
@@ -322,7 +315,7 @@ ga_csg ga_csg::Pyramid() {
     for (int i = 0; i < vertgroups.size(); i++) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < vertgroups[i].size(); j++) {
-            vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i+j]));
+            vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i + j]));
         }
         polys.push_back(ga_polygon(vs));
     }

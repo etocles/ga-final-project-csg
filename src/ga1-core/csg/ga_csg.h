@@ -1,5 +1,3 @@
-
-
 #ifndef GA_CSG_H
 #define GA_CSG_H
 
@@ -28,25 +26,18 @@ public:
 	static enum class Shape { CUBE, SPHERE, PYRAMID };
 	static enum class OP { ADD, SUB, INTERSECT};
 
-	// TODO: Propogate these important assemblies into each constructor
 	ga_csg(Shape shp);
 	ga_csg(ga_csg& other);
-	ga_csg(std::vector<ga_polygon>& polys);;
+	ga_csg(std::vector<ga_polygon>& polys);
 	~ga_csg() {
 		glDeleteVertexArrays(1, (GLuint*)&_vao);
 		glDeleteBuffers(3, _vbos);
 	};
 
-	/* Drawing the CSG to the screen */
-	void assemble_drawcall(ga_static_drawcall& draw);
-
-	/* Retrieve a certain CSG object's polygons */
-	std::vector<ga_polygon> to_polygons() { return _polygons; };
-
 	/* Retrieve the CSG's polygons as they appear in unit-space */
 	std::vector<ga_polygon> get_polygons_raw() { return _polygons; };
 
-	/* Retrieve a certain CSG object's polygons as they appear on-screen
+	/* Retrieve a certain CSG object's polygons with transformations
 	*  !! VERY EXPENSIVE OPERATION !!
 	*/
 	std::vector<ga_polygon> get_polygons() {
@@ -70,7 +61,7 @@ public:
 	ga_csg intersect(ga_csg& other);
 
 	ga_csg static Cube();
-	ga_csg Sphere();
+	ga_csg static Sphere();
 	ga_csg static Pyramid();
 
 	void set_color(ga_vec3f col) { _color = col; _material->set_color(col); };

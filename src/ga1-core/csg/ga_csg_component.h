@@ -25,7 +25,7 @@ class ga_csg_component :public ga_component
 {
 public:
 	ga_csg_component(ga_entity* ent, ga_csg::Shape which_shape, ga_vec3f translation = { 0.0f,0.0f,0.0f }, ga_vec3f color = { 1.0f,1.0f,1.0f });
-	ga_csg_component(ga_entity* ent, ga_csg& csg1, ga_csg& csg2);
+	ga_csg_component(ga_entity* ent, ga_csg& csg1, ga_csg& csg2, ga_csg::OP op = ga_csg::OP::ADD);
 	virtual ~ga_csg_component();
 	virtual void update(struct ga_frame_params* params) override;
 	virtual void late_update(struct ga_frame_params* params) override;

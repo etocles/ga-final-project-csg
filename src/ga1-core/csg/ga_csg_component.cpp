@@ -16,8 +16,18 @@ ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg::Shape which_sha
     _csgs[0]->set_color(color);
 }
 
-ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg& csg1, ga_csg& csg2) : ga_component(ent) {
-    _csgs.push_back(new ga_csg(csg1.add(csg2)));
+ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg& csg1, ga_csg& csg2, ga_csg::OP op) : ga_component(ent) {
+    
+    switch (op) {
+    case ga_csg::OP::ADD:
+        _csgs.push_back(new ga_csg(csg1.add(csg2)));
+        break;
+    case ga_csg::OP::SUB:
+        break;
+    case ga_csg::OP::INTERSECT:
+        break;
+    }
+    
 }
 
 ga_csg_component::~ga_csg_component() {
