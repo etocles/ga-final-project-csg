@@ -73,15 +73,16 @@ public:
 	ga_csg Sphere();
 	ga_csg static Pyramid();
 
-	void set_color(ga_vec3f& col) { _color = col; _material->set_color(col); };
-	void translate(ga_vec3f& t);
-	void scale(ga_vec3f& t);
-	void extrude(ga_vec3f& dir, float& amt);
+	void set_color(ga_vec3f col) { _color = col; _material->set_color(col); };
+	void set_pos(ga_vec3f t);
+	void set_scale(ga_vec3f t);
+	void extrude(ga_vec3f dir, float amt);
 
 	ga_mat4f get_transform() { return _transform; };
 	ga_csg_material* get_material() { return _material; };
 
-
+	std::string name;
+	int id;
 private:
 	uint32_t make_vao();
 	void default_values();

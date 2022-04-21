@@ -11,34 +11,43 @@
 #include "ga_csg_component.h"
 
 ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg::Shape which_shape, ga_vec3f translation, ga_vec3f color) : ga_component(ent) {
-    _csg = new ga_csg(which_shape);
-    _csg->translate(translation);
-    _csg->set_color(color);
-    name = (which_shape == ga_csg::Shape::CUBE) ? "Cube" : "Pyramid";
+    _csgs.push_back(new ga_csg(which_shape));
+    _csgs[0]->set_pos(translation);
+    _csgs[0]->set_color(color);
 }
 
 ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg& csg1, ga_csg& csg2) : ga_component(ent) {
-    _csg = new ga_csg(csg1.add(csg2));
+    _csgs.push_back(new ga_csg(csg1.add(csg2)));
 }
 
 ga_csg_component::~ga_csg_component() {
-    delete _csg;
+    for (int i = 0; i < _csgs.size(); i++) delete _csgs[i];
 }
 
 void ga_csg_component::update(ga_frame_params* params) {
     float dt = std::chrono::duration_cast<std::chrono::duration<float>>(params->_delta_time).count();
 
-    ga_static_drawcall draw;
-    draw._name = "ga_csg_component";
-    draw._transform = get_entity()->get_transform();
-    draw._draw_mode = GL_TRIANGLES;
-    //_csg->assemble_drawcall(draw);    
-    draw._vao = _csg->_vao;
-    draw._index_count = _csg->_index_count;
-    _csg->_material->set_transform(_csg->_transform);
-    draw._material = _csg->_material;
-
+    std::vector<ga_static_drawcall> draws;
+    for (int i = 0; i < _csgs.size(); i++) {
+        ga_static_drawcall draw;
+        draw._name = _csgs[i]->name;
+        draw._transform = get_entity()->get_transform();
+        draw._draw_mode = GL_TRIANGLES;
+        //_csg->assemble_drawcall(draw);    
+        draw._vao = _csgs[i]->_vao;
+        draw._index_count = _csgs[i]->_index_count;
+        _csgs[i]->_material->set_transform(_csgs[i]->_transform);
+        draw._material = _csgs[i]->_material;
+        draws.push_back(draw);
+    }    
     while (params->_static_drawcall_lock.test_and_set(std::memory_order_acquire)) {}
-    params->_static_drawcalls.push_back(draw);
+    for (ga_static_drawcall d : draws) params->_static_drawcalls.push_back(d);
     params->_static_drawcall_lock.clear(std::memory_order_release);
+}
+
+void ga_csg_component::remove(int i)
+{
+    delete _csgs[i];
+    _csgs.erase(_csgs.begin() + i);
+    return;
 }

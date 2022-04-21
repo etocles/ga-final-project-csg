@@ -391,17 +391,17 @@ ga_csg ga_csg::Sphere() {
 }
 #pragma endregion
 
-void ga_csg::translate(ga_vec3f& t)
+void ga_csg::set_pos(ga_vec3f t)
 {
     _transform.set_translation(t);
 }
-void ga_csg::scale(ga_vec3f& t)
+void ga_csg::set_scale (ga_vec3f t)
 {
     _transform.data[0][0] = t.axes[0];
     _transform.data[1][1] = t.axes[1];
     _transform.data[2][2] = t.axes[2];
 }
-void ga_csg::extrude(ga_vec3f& dir, float& amt) {
+void ga_csg::extrude(ga_vec3f dir, float amt) {
     ga_vec3f s = { 1.0f,1.0f,1.0f };    // keep all the other dimensions intact
     s += dir.scale_result(amt - 1);
     ga_vec3f currentLengthInDimension = { abs(dir.x) > 0 ? _transform.data[0][0] : 0.0,

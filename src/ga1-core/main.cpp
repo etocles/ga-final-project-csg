@@ -43,8 +43,7 @@
 
 ga_font* g_font = nullptr;
 static void set_root_path(const char* exepath);
-static void gui_test(ga_frame_params* params, ga_entity* ent);
-std::vector<ga_csg_component*> csg_objs;
+static void gui_test(ga_frame_params* params, ga_csg_component& ent);
 int selected_index = -1;
 int selected_index_2 = -1;
 
@@ -92,19 +91,20 @@ int main(int argc, const char** argv)
 
 	ga_entity csg_test_COMBO2;
 	ga_csg_component csg_COMBINE2(&csg_test_COMBO2, *csg_COMBINE.get_csg(), *csg_cube3.get_csg());
-	csg_COMBINE2.set_pos({ 6.0f,1.0f,0.0f });
-	csg_COMBINE.set_pos({ -1.0f,1.0f,0.0f });
-	csg_cube1.set_pos({ -4.0f,1.0f,0.0f });
-	csg_cube2.set_pos({ -3.5f,1.5f,0.0f });
-	csg_cube3.set_pos({ 3.0f,1.25f,0.5f });
+	csg_COMBINE2.get_csg()->set_pos({ 6.0f,1.0f,0.0f });
+	csg_COMBINE.get_csg()->set_pos({ -1.0f,1.0f,0.0f });
+	csg_cube1.get_csg()->set_pos({ -4.0f,1.0f,0.0f });
+	csg_cube2.get_csg()->set_pos({ -3.5f,1.5f,0.0f });
+	csg_cube3.get_csg()->set_pos({ 3.0f,1.25f,0.5f });
 	sim->add_entity(&csg_test_COMBO2);
 
 
-	ga_entity my_csg;
-	ga_csg_component csg1(&my_csg, ga_csg::Shape::CUBE);
-	csg1.set_pos({ 0.0f,0.0f,4.0f });
-	csg_objs.push_back(&csg1);
-	sim->add_entity(&my_csg);
+	ga_entity my_csg_entity;
+	ga_csg_component my_csg(&my_csg_entity, ga_csg::Shape::CUBE);
+	sim->add_entity(&my_csg_entity);
+	my_csg.get_csg()->set_pos({ 0.0f,0.0f,4.0f });
+	my_csg.get_csg()->name = "Cube";
+	my_csg.get_csg()->id = my_csg.get_id();
 
 	ga_entity floor;
 	ga_plane floor_plane;
@@ -135,7 +135,7 @@ int main(int argc, const char** argv)
 		sim->late_update(&params);
 
 		// Run gui test.
-		gui_test(&params, &my_csg);
+		gui_test(&params, my_csg);
 
 		// Draw to screen.
 		output->update(&params);
@@ -178,12 +178,12 @@ static void set_root_path(const char* exepath)
 #endif
 }
 
-static void gui_test(ga_frame_params* params, ga_entity* ent)
+static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 {
 
 	// Variable initializations 
-	ga_csg_component* selected = (selected_index >= 0) ? csg_objs[selected_index] : NULL;
-	ga_csg_component* selected2 = (selected_index_2 >= 0) ? csg_objs[selected_index_2] : NULL;
+	ga_csg* selected = (selected_index >= 0) ? comp.get_csg(selected_index) : NULL;
+	ga_csg* selected2 = (selected_index_2 >= 0) ? comp.get_csg(selected_index_2) : NULL;
 	std::string hovered = "NONE";
 	std::vector<const char*> mods = { "+x","-x","+y","-y","+z","-z" };
 	std::vector<ga_vec3f> mod_dirs = { {1.0f,0.0f,0.0f}, //"+x",
@@ -202,19 +202,19 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	ga_button add_cube_button = ga_button("Add Cube", 20.0f, 700.0f, params);
 	ga_button add_pyramid_button = ga_button("Add Pyramid", 100.0f, 700.0f, params);
 	// SHOW ALL OF THE OBJECTS
-	for (int i = 0; i < csg_objs.size(); i++) {
+	for (int i = 0; i < comp.size(); i++) {
 		ga_button temp = ga_button(std::to_string(i).c_str(), 20.0f + i *25.0f, 80.0f, params);
 
 		// if hovered, highlight and inform user
 		if (temp.get_hover(params))
 		{
-			hovered = csg_objs[i]->name;
+			hovered = comp.get_csg(i)->name;
 			// highlight the actual selected object via shader
-			csg_objs[i]->get_csg()->get_material()->set_highlight(true);
+			comp.get_csg(i)->get_material()->set_highlight(true);
 		}
 		else {
 			// unhighlight self if not being hovered
-			csg_objs[i]->get_csg()->get_material()->set_highlight(false);
+			comp.get_csg(i)->get_material()->set_highlight(false);
 		}
 
 		// if clicked, check what kind of click
@@ -223,13 +223,13 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 			// if right click
 			if (params->_mouse_click_mask > 2) {
 				selected_index_2 = i;
-				selected2 = csg_objs[i];
+				selected2 = comp.get_csg(i);
 				std::cout << "FIr!!ed " << i << " selected: " << selected_index  << " selected2: " << selected_index_2<< std::endl;
 			}
 			// if left mouse click
 			else {
 				selected_index = i;
-				selected = csg_objs[i];
+				selected = comp.get_csg(i);
 				std::cout<<"FIred " << i << " selected: " << selected_index << " selected2: " << selected_index_2 << std::endl;
 			}
 		}
@@ -246,20 +246,24 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		float xpos = fmodf(rand(), 5.0f);
 		float ypos = fmodf(rand(), 5.0f);
 		float zpos = fmodf(rand(), 5.0f);
-		csg_objs.push_back(new ga_csg_component(ent, ga_csg::Shape::CUBE, { xpos,ypos,zpos }));
+		ga_csg* temp = new ga_csg(ga_csg::Shape::CUBE);
+		temp->set_pos({ xpos,ypos,zpos });
+		comp.add(temp);
 	}
 	if (add_pyramid_button.get_clicked(params))
 	{
 		float xpos = fmodf(rand(), 5.0f);
 		float ypos = fmodf(rand(), 5.0f);
 		float zpos = fmodf(rand(), 5.0f);
-		csg_objs.push_back(new ga_csg_component(ent, ga_csg::Shape::PYRAMID, { xpos,ypos,zpos }));
+		ga_csg* temp = new ga_csg(ga_csg::Shape::PYRAMID);
+		temp->set_pos({ xpos,ypos,zpos });
+		comp.add(temp);
 	}
 
 	// if Primary Object is selected
 	if (selected_index >= 0) {
 		ga_label(("Object #1 Selected: " + selected->name + std::to_string(selected_index)).c_str(), 10, 120.0f, params);
-		selected->get_csg()->get_material()->set_highlight(true);
+		selected->get_material()->set_highlight(true);
 
 
 		ga_label scale_label = ga_label("Scale", 20.0f, 150.0f, params);
@@ -269,10 +273,9 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 
 		// Remove the object from the vector
 		if (ga_button("x", 180, 150, params, {0.8f, 0.2f, 0.2f}).get_clicked(params)) {
-			//csg_objs.erase(csg_objs.begin() + selected_index);
-			//delete selected;
-			//selected_index = -1;
-			//return;
+			comp.remove(selected_index);
+			selected_index = -1;
+			return;
 		}
 
 
@@ -281,7 +284,7 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		for (int i = 0; i < mods.size(); i++) {
 			if (ga_button(mods[i], 25.0f + i*30.0f, 170.0f, params).get_pressed(params))
 			{
-				current = selected->get_csg()->get_transform().get_scale();
+				current = selected->get_transform().get_scale();
 				current += mod_dirs[i].scale_result(amt);
 				selected->set_scale(current);
 			}
@@ -290,14 +293,14 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		for (int i = 0; i < mods.size(); i++) {
 			if (ga_button(mods[i], 25.0f + i*30.0f, 220.0f, params).get_pressed(params))
 			{
-				selected->do_extrude(mod_dirs[i], 1+amt);
+				selected->extrude(mod_dirs[i], 1+amt);
 			}
 		}
 		// Move Functions
 		for (int i = 0; i < mods.size(); i++) {
 			if (ga_button(mods[i], 25.0f + i*30.0f, 270.0f, params).get_pressed(params))
 			{
-				current = selected->get_csg()->get_transform().get_translation();
+				current = selected->get_transform().get_translation();
 				current += mod_dirs[i].scale_result(amt);
 				selected->set_pos(current);
 			}
@@ -306,7 +309,7 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	// if Secondary Object is selected
 	if (selected_index_2 >= 0 && selected_index_2 != selected_index) {
 		ga_label(("Object #2 Selected: " + selected2->name + std::to_string(selected_index_2)).c_str(), 10, 320, params);
-		selected2->get_csg()->get_material()->set_highlight(true);
+		selected2->get_material()->set_highlight(true);
 
 		ga_label scale_label = ga_label("Scale", 20.0f, 350.0f, params);
 		ga_label extrd_label = ga_label("Extrude", 20.0f, 400.0f, params);
@@ -315,17 +318,16 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 
 		// Remove the object from the vector
 		if (ga_button("x", 180, 350, params, { 0.8f, 0.2f, 0.2f }).get_clicked(params)) {
-			//csg_objs.erase(csg_objs.begin() + selected_index);
-			//delete selected2;
-			//selected_index_2 = -1;
-			//return;
+			comp.remove(selected_index_2);
+			selected_index_2 = -1;
+			return;
 		}
 		// Scale Functions
 		ga_vec3f current;
 		for (int i = 0; i < mods.size(); i++) {
 			if (ga_button(mods[i], 25.0f + i * 30.0f, 370.0f, params).get_pressed(params))
 			{
-				current = selected2->get_csg()->get_transform().get_scale();
+				current = selected2->get_transform().get_scale();
 				current += mod_dirs[i].scale_result(amt);
 				selected2->set_scale(current);
 			}
@@ -334,14 +336,14 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		for (int i = 0; i < mods.size(); i++) {
 			if (ga_button(mods[i], 25.0f + i * 30.0f, 420.0f, params).get_pressed(params))
 			{
-				selected2->do_extrude(mod_dirs[i], 1+amt);
+				selected2->extrude(mod_dirs[i], 1+amt);
 			}
 		}
 		// Move Functions
 		for (int i = 0; i < mods.size(); i++) {
 			if (ga_button(mods[i], 25.0f + i * 30.0f, 470.0f, params).get_pressed(params))
 			{
-				current = selected2->get_csg()->get_transform().get_translation();
+				current = selected2->get_transform().get_translation();
 				current += mod_dirs[i].scale_result(amt);
 				selected2->set_pos(current);
 			}
@@ -358,11 +360,11 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 	ga_button sub_button = ga_button("Subtract", 75.0f, 610.0f, params);
 	ga_button intersect_button = ga_button("Intersect", 155.0f, 610.0f, params);
 	if (union_button.get_clicked(params)) {
-		ga_csg_component* temp = new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg());
+		ga_csg* temp = new ga_csg(selected->add(*selected2));
 		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : selected->name;
 		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name;
 		temp->name = name1 + "+" + name2;
-		csg_objs.push_back(temp);
+		comp.add(temp);
 	}
 	if (sub_button.get_clicked(params)) {
 		//csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));

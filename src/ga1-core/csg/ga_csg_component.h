@@ -27,17 +27,15 @@ public:
 	ga_csg_component(ga_entity* ent, ga_csg::Shape which_shape, ga_vec3f translation = { 0.0f,0.0f,0.0f }, ga_vec3f color = { 1.0f,1.0f,1.0f });
 	ga_csg_component(ga_entity* ent, ga_csg& csg1, ga_csg& csg2);
 	virtual ~ga_csg_component();
-
 	virtual void update(struct ga_frame_params* params) override;
 
+	ga_csg* get_csg(int i = 0) { return _csgs[i]; };
+	void add(ga_csg* csg) { _csgs.push_back(csg); }
+	void remove(int i);
+	int size() { return _csgs.size(); }
+	int get_id() { return nonce++; }
 
-	void set_pos(ga_vec3f t) { _csg->translate(t); }
-	void set_scale(ga_vec3f t) { _csg->scale(t); }
-	void set_color (ga_vec3f c) { _csg->set_color(c); }
-	void do_extrude(ga_vec3f t, float amt) { _csg->extrude(t,amt); }
-	ga_csg* get_csg() { return _csg; };
-
-	std::string name;
 private:
-	ga_csg* _csg;
+	std::vector<ga_csg*> _csgs;
+	int nonce = 0;
 };
