@@ -295,27 +295,16 @@ ga_csg ga_csg::Pyramid() {
 
     std::vector<ga_vec3f> norms = {
         {0, -1, 0}, // Bottom
-        {0, -1, 0}, // Bottom
-        {0, -1, 0}, // Bottom
-        {0, -1, 0}, // Bottom
-        {0, 0.89442, +0.4472}, // Front    
-        {0, 0.89442, +0.4472}, // Front    
-        {0, 0.89442, +0.4472}, // Front    
-        {0, 0.89442, -0.4472}, // Back       
-        {0, 0.89442, -0.4472}, // Back       
-        {0, 0.89442, -0.4472}, // Back       
+        {0, 0.89442, +0.4472}, // Front  
+        {0, 0.89442, -0.4472}, // Back        
         {-0.4472, 0.89442, 0}, // Left     
-        {-0.4472, 0.89442, 0}, // Left     
-        {-0.4472, 0.89442, 0}, // Left     
-        {+0.4472, 0.89442, 0}, // Right    
-        {+0.4472, 0.89442, 0}, // Right    
-        {+0.4472, 0.89442, 0}  // Right    
+        {+0.4472, 0.89442, 0} // Right    
     };
 
     for (int i = 0; i < vertgroups.size(); i++) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < vertgroups[i].size(); j++) {
-            vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i + j]));
+            vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i]));
         }
         polys.push_back(ga_polygon(vs));
     }
