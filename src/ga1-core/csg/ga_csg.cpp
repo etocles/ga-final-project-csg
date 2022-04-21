@@ -305,21 +305,21 @@ ga_csg ga_csg::Pyramid() {
         {0, -1, 0}, // Bottom
         {0, -1, 0}, // Bottom
         {0, -1, 0}, // Bottom
-        {0, 0, +1}, // Front    ~
-        {0, 0, +1}, // Front    ~
-        {0, 0, +1}, // Front    ~
-        {0, 0, -1}, // Back     ~  
-        {0, 0, -1}, // Back     ~  
-        {0, 0, -1}, // Back     ~  
-        {-1, 0, 0}, // Left     ~
-        {-1, 0, 0}, // Left     ~
-        {-1, 0, 0}, // Left     ~
-        {+1, 0, 0}, // Right    ~
-        {+1, 0, 0}, // Right    ~
-        {+1, 0, 0}  // Right    ~
+        {0, 2, +1}, // Front    ~
+        {0, 2, +1}, // Front    ~
+        {0, 2, +1}, // Front    ~
+        {0, 2, -1}, // Back     ~  
+        {0, 2, -1}, // Back     ~  
+        {0, 2, -1}, // Back     ~  
+        {-1, 2, 0}, // Left     ~
+        {-1, 2, 0}, // Left     ~
+        {-1, 2, 0}, // Left     ~
+        {+1, 2, 0}, // Right    ~
+        {+1, 2, 0}, // Right    ~
+        {+1, 2, 0}  // Right    ~
     };
 
-    for (int i = 0; i < vertgroups.size(); i += 4) {
+    for (int i = 0; i < vertgroups.size(); i++) {
         std::vector<ga_csg_vertex> vs;
         for (int j = 0; j < vertgroups[i].size(); j++) {
             vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i+j]));
