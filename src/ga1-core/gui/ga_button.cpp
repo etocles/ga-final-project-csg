@@ -33,6 +33,27 @@ ga_button::ga_button(const char* text, float x, float y, ga_frame_params* params
 	}
 }
 
+ga_button::ga_button(const char* text, float x, float y, ga_frame_params* params, ga_vec3f color)
+{
+	extern ga_font* g_font;
+	g_font->print(params, text, x, y, k_text_color, &_min, &_max);
+
+	if (get_hover(params))
+	{
+		draw_outline(params, _min, _max, color.scale_result(1.3f), k_button_offset);
+	}
+	else
+	{
+		draw_outline(params, _min, _max, color, k_button_offset);
+	}
+
+	if (get_pressed(params))
+	{
+		draw_fill(params, _min, _max, k_button_press_color);
+		g_font->print(params, text, x, y, k_text_color);
+	}
+}
+
 ga_button::~ga_button()
 {
 }

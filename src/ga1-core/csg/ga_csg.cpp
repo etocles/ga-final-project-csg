@@ -16,7 +16,6 @@
 
 
 
-// TODO: Propogate these important assemblies into each constructor
 void ga_csg::default_values()
 {
     _color = { 1.0f,1.0f,1.0f };

@@ -267,6 +267,14 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		ga_label trans_label = ga_label("Translate", 20.0f, 250.0f, params);
 		ga_panel inspector = ga_panel(params, { 15,135 }, { 200, 285 });
 
+		// Remove the object from the vector
+		if (ga_button("x", 180, 150, params, {0.8f, 0.2f, 0.2f}).get_clicked(params)) {
+			//csg_objs.erase(csg_objs.begin() + selected_index);
+			//delete selected;
+			//selected_index = -1;
+			//return;
+		}
+
 
 		// Scale Functions
 		ga_vec3f current;
@@ -305,7 +313,13 @@ static void gui_test(ga_frame_params* params, ga_entity* ent)
 		ga_label trans_label = ga_label("Translate", 20.0f, 450.0f, params);
 		ga_panel inspector = ga_panel(params, { 15,335 }, { 200, 485 });
 
-
+		// Remove the object from the vector
+		if (ga_button("x", 180, 350, params, { 0.8f, 0.2f, 0.2f }).get_clicked(params)) {
+			//csg_objs.erase(csg_objs.begin() + selected_index);
+			//delete selected2;
+			//selected_index_2 = -1;
+			//return;
+		}
 		// Scale Functions
 		ga_vec3f current;
 		for (int i = 0; i < mods.size(); i++) {
