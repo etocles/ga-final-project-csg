@@ -41,7 +41,7 @@
 #include <unistd.h>
 #endif
 
-ga_font* g_font = nullptr;
+ga_font* g_font = nullptr; // general font (WHITE)
 static void set_root_path(const char* exepath);
 static void gui_test(ga_frame_params* params, ga_csg_component& ent);
 int selected_index = -1;
@@ -203,8 +203,8 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 	ga_button add_pyramid_button = ga_button("Add Pyramid", 100.0f, 700.0f, params);
 	// SHOW ALL OF THE OBJECTS
 	for (int i = 0; i < comp.size(); i++) {
-		ga_button temp = ga_button(std::to_string(i).c_str(), 20.0f + i *25.0f, 80.0f, params);
 		ga_csg* cur = comp.get_csg(i);
+		ga_button temp = ga_button(std::to_string(cur->id).c_str(), 20.0f + i *25.0f, 80.0f, params);
 		cur->get_material()->set_highlight(false);
 		cur->get_material()->set_selected(false);
 		// if hovered, highlight and inform user
@@ -264,7 +264,11 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 
 	// if Primary Object is selected
 	if (selected_index >= 0) {
-		ga_label(("Object #1 Selected: " + selected->name + std::to_string(selected_index)).c_str(), 10, 120.0f, params);
+		g_font->print(params,
+			("Object #1 Selected: " + selected->name + std::to_string(selected->id)).c_str(),
+			10,
+			120,
+			{ 0.4,0.4,0.9 });
 		selected->get_material()->set_selected(true);
 		selected->get_material()->set_secondary(false);
 
@@ -311,7 +315,12 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 	}
 	// if Secondary Object is selected
 	if (selected_index_2 >= 0 && selected_index_2 != selected_index) {
-		ga_label(("Object #2 Selected: " + selected2->name + std::to_string(selected_index_2)).c_str(), 10, 320, params);
+		//ga_label(, 10, 320, params);
+		g_font->print(params, 
+			("Object #2 Selected: " + selected2->name + std::to_string(selected2->id)).c_str(),
+			10, 
+			320, 
+			{ 0.9,0.4,0.4 });
 		selected2->get_material()->set_selected(true);
 		selected2->get_material()->set_secondary(true);
 

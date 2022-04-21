@@ -18,6 +18,7 @@
 ** Represents a TrueType font of a certain pixel height.
 ** Capable of displaying ASCII characters from that font on screen.
 */
+class ga_font_material;
 class ga_font
 {
 public:
@@ -32,6 +33,8 @@ public:
 		const struct ga_vec3f& color,
 		struct ga_vec2f* min = nullptr,
 		struct ga_vec2f* max = nullptr);
+
+	ga_font_material* get_material() {return _material; };
 
 private:
 	class ga_texture* _texture;
