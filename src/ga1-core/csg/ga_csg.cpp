@@ -31,12 +31,15 @@ ga_csg::ga_csg(ga_csg::Shape shp) {
     switch (shp) {
         case Shape::CUBE:
             _polygons = Cube()._polygons;
+            name = "Cube";
             break;
         case Shape::SPHERE:
             _polygons = Sphere()._polygons;
+            name = "Sphere";
             break;
         case Shape::PYRAMID:
             _polygons = Pyramid()._polygons;
+            name = "Pyramid";
             break;
     }
     default_values();

@@ -412,6 +412,7 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : selected->name;
 		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name;
 		temp->name = name1 + "+" + name2;
+		temp->id = comp.get_id();
 		comp.add(temp);
 	}
 	if (sub_button.get_clicked(params)) {

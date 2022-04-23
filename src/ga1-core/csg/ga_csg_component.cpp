@@ -14,19 +14,25 @@ ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg::Shape which_sha
     _csgs.push_back(new ga_csg(which_shape));
     _csgs[0]->set_pos(translation);
     _csgs[0]->set_color(color);
+    _csgs[0]->id = get_id();
 }
 
 ga_csg_component::ga_csg_component(class ga_entity* ent, ga_csg& csg1, ga_csg& csg2, ga_csg::OP op) : ga_component(ent) {
     
+    ga_csg* temp = NULL;
     switch (op) {
     case ga_csg::OP::ADD:
-        _csgs.push_back(new ga_csg(csg1.add(csg2)));
+        temp = new ga_csg(csg1.add(csg2));
         break;
     case ga_csg::OP::SUB:
         break;
     case ga_csg::OP::INTERSECT:
         break;
+    default:
+        exit(0);
     }
+    temp->id = get_id();
+    _csgs.push_back(temp);
     
 }
 
