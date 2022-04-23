@@ -114,10 +114,12 @@ ga_csg ga_csg::add(ga_csg& other)
 ga_csg ga_csg::subtract(ga_csg& other)
 {
     // TODO: NEEDS DEBUGGING
-    ga_node a = ga_node(_polygons);
-    ga_node b = ga_node(other._polygons);
-    a.clip_to(ga_node(other._polygons));
-    b.clip_to(ga_node(_polygons));
+    std::vector<ga_polygon> own_adjusted_polys = get_polygons();
+    std::vector<ga_polygon> other_adjusted_polys = other.get_polygons();
+    ga_node a = ga_node(own_adjusted_polys);
+    ga_node b = ga_node(other_adjusted_polys);
+    a.clip_to(ga_node(other_adjusted_polys));
+    b.clip_to(ga_node(own_adjusted_polys));
     a.invert();
     a.clip_to(b);
     b.clip_to(a);
@@ -148,8 +150,11 @@ ga_csg ga_csg::subtract(ga_csg& other)
 // 
 ga_csg ga_csg::intersect(ga_csg& other){
     // TODO: NEEDS DEBUGGING
-    ga_node a = ga_node(_polygons);
-    ga_node b = ga_node(other._polygons);
+
+    std::vector<ga_polygon> own_adjusted_polys = get_polygons();
+    std::vector<ga_polygon> other_adjusted_polys = other.get_polygons();
+    ga_node a = ga_node(own_adjusted_polys);
+    ga_node b = ga_node(other_adjusted_polys);
     a.invert();
     b.clip_to(a);
     b.invert();
