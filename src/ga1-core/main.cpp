@@ -275,11 +275,13 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 
 		ga_label scale_label = ga_label("Scale", 20.0f, 150.0f, params);
 		ga_label extrd_label = ga_label("Extrude", 20.0f, 200.0f, params);
-		ga_label trans_label = ga_label("Translate", 20.0f, 250.0f, params);
-		ga_panel inspector = ga_panel(params, { 15,135 }, { 200, 285 });
+		ga_label out_dir_label = ga_label("Out:", 20.0f, 220.0f, params);
+		ga_label in_dir_label = ga_label("In: ", 20.0f, 240.0f, params);
+		ga_label trans_label = ga_label("Translate", 20.0f, 260.0f, params);
+		ga_panel inspector = ga_panel(params, { 15,135 }, { 250, 295 });
 
 		// Remove the object from the vector
-		if (ga_button("x", 180, 150, params, {0.8f, 0.2f, 0.2f}).get_clicked(params)) {
+		if (ga_button("x", 230, 150, params, {0.8f, 0.2f, 0.2f}).get_clicked(params)) {
 			comp.remove(selected_index);
 			selected_index = -1;
 			return;
@@ -296,16 +298,26 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 				selected->set_scale(current);
 			}
 		}
-		// Extrude Functions
+		// Extrude Functions (OUT)
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 25.0f + i*30.0f, 220.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 60.0f + i*30.0f, 220.0f, params).get_pressed(params))
 			{
-				selected->extrude(mod_dirs[i], 1+amt);
+				float temp = (mod_dirs[i].dot({ 1.0f,1.0f,1.0f }) > 0) ? 1 + amt : 1 - amt;
+				selected->extrude(mod_dirs[i], temp);
+			}
+		}
+
+		// Extrude Functions (IN)
+		for (int i = 0; i < mods.size(); i++) {
+			if (ga_button(mods[i], 60.0f + i * 30.0f, 240.0f, params).get_pressed(params))
+			{
+				float temp = (mod_dirs[i].dot({1.0f,1.0f,1.0f}) < 0) ? 1 + amt : 1 - amt;
+				selected->extrude(mod_dirs[i], temp);
 			}
 		}
 		// Move Functions
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 25.0f + i*30.0f, 270.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i*30.0f, 280.0f, params).get_pressed(params))
 			{
 				current = selected->get_transform().get_translation();
 				current += mod_dirs[i].scale_result(amt);
@@ -326,11 +338,13 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 
 		ga_label scale_label = ga_label("Scale", 20.0f, 350.0f, params);
 		ga_label extrd_label = ga_label("Extrude", 20.0f, 400.0f, params);
-		ga_label trans_label = ga_label("Translate", 20.0f, 450.0f, params);
-		ga_panel inspector = ga_panel(params, { 15,335 }, { 200, 485 });
+		ga_label out_dir_label = ga_label("Out:", 20.0f, 420.0f, params);
+		ga_label in_dir_label = ga_label("In: ", 20.0f, 440.0f, params);
+		ga_label trans_label = ga_label("Translate", 20.0f, 460.0f, params);
+		ga_panel inspector = ga_panel(params, { 15,335 }, { 250, 495 });
 
 		// Remove the object from the vector
-		if (ga_button("x", 180, 350, params, { 0.8f, 0.2f, 0.2f }).get_clicked(params)) {
+		if (ga_button("x", 230, 350, params, { 0.8f, 0.2f, 0.2f }).get_clicked(params)) {
 			comp.remove(selected_index_2);
 			selected_index_2 = -1;
 			return;
@@ -345,16 +359,37 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 				selected2->set_scale(current);
 			}
 		}
-		// Extrude Functions
+
+		//// Extrude Functions
+		//for (int i = 0; i < mods.size(); i++) {
+		//	if (ga_button(mods[i], 25.0f + i * 30.0f, 420.0f, params).get_pressed(params))
+		//	{
+		//		selected2->extrude(mod_dirs[i], 1+amt);
+		//	}
+		//}
+
+
+		// Extrude Functions (OUT)
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 25.0f + i * 30.0f, 420.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 60.0f + i * 30.0f, 420.0f, params).get_pressed(params))
 			{
-				selected2->extrude(mod_dirs[i], 1+amt);
+				float temp = (mod_dirs[i].dot({ 1.0f,1.0f,1.0f }) > 0) ? 1 + amt : 1 - amt;
+				selected2->extrude(mod_dirs[i], temp);
 			}
 		}
+
+		// Extrude Functions (IN)
+		for (int i = 0; i < mods.size(); i++) {
+			if (ga_button(mods[i], 60.0f + i * 30.0f, 440.0f, params).get_pressed(params))
+			{
+				float temp = (mod_dirs[i].dot({ 1.0f,1.0f,1.0f }) < 0) ? 1 + amt : 1 - amt;
+				selected2->extrude(mod_dirs[i], temp);
+			}
+		}
+
 		// Move Functions
 		for (int i = 0; i < mods.size(); i++) {
-			if (ga_button(mods[i], 25.0f + i * 30.0f, 470.0f, params).get_pressed(params))
+			if (ga_button(mods[i], 25.0f + i * 30.0f, 480.0f, params).get_pressed(params))
 			{
 				current = selected2->get_transform().get_translation();
 				current += mod_dirs[i].scale_result(amt);
