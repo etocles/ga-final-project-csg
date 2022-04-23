@@ -409,16 +409,26 @@ static void gui_test(ga_frame_params* params, ga_csg_component& comp)
 	ga_button intersect_button = ga_button("Intersect", 155.0f, 610.0f, params);
 	if (union_button.get_clicked(params)) {
 		ga_csg* temp = new ga_csg(selected->add(*selected2));
-		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : selected->name;
-		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name;
+		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : "(" + selected->name + std::to_string(selected->id);
+		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name + std::to_string(selected2->id) + ")";
 		temp->name = name1 + "+" + name2;
 		temp->id = comp.get_id();
 		comp.add(temp);
 	}
 	if (sub_button.get_clicked(params)) {
-		//csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));
+		ga_csg* temp = new ga_csg(selected->subtract(*selected2));
+		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : "(" + selected->name + std::to_string(selected->id);
+		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name + std::to_string(selected2->id) + ")";
+		temp->name = name1 + "-" + name2;
+		temp->id = comp.get_id();
+		comp.add(temp);
 	}
 	if (intersect_button.get_clicked(params)) {
-		//csg_objs.push_back(new ga_csg_component(ent, *selected->get_csg(), *selected2->get_csg()));
+		ga_csg* temp = new ga_csg(selected->subtract(*selected2));
+		std::string name1 = (selected->name[0] == '(') ? "(" + selected->name : "(" + selected->name + std::to_string(selected->id);
+		std::string name2 = (selected2->name[0] == '(') ? selected2->name + ")" : selected2->name + std::to_string(selected2->id) + ")"; 
+		temp->name = name1 + "x" + name2;
+		temp->id = comp.get_id();
+		comp.add(temp);
 	}
 }

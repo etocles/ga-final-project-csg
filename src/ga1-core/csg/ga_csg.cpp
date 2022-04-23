@@ -87,7 +87,7 @@ ga_csg ga_csg::add(ga_csg& other)
     a.clip_to(ga_node(own_adjusted_polys));
     b.clip_to(ga_node(other_adjusted_polys));
     //b.invert();
-    //b.clip_to(ga_node(other._polygons));
+    //b.clip_to(ga_node(other_adjusted_polys));
     //b.invert();
     a.build(b.all_polygons());
     ga_csg temp =  ga_csg(a.all_polygons());
