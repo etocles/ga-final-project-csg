@@ -106,6 +106,22 @@ int main(int argc, const char** argv)
 	my_csg.get_csg()->name = "Cube";
 	my_csg.get_csg()->id = my_csg.get_id();
 
+
+	// Testing other operations
+	ga_csg* subtest = new ga_csg(ga_csg::Cube());
+	subtest->id = my_csg.get_id();
+	subtest->name = "Cube";
+	subtest->set_pos({ 0.5f,-0.5f,4.0f });
+	my_csg.add(subtest);
+
+
+	ga_csg* subres = new ga_csg(my_csg.get_csg(0)->subtract(*my_csg.get_csg(1)));
+	subres->name = "Subcombo";
+	subres->id = my_csg.get_id();
+	subres->set_pos({ 0.0f, 2.0f, 0.0f });
+	my_csg.add(subres);
+	//////////////////////////////
+
 	ga_entity floor;
 	ga_plane floor_plane;
 	ga_physics_component floor_collider(&floor, &floor_plane, 0.0f);
