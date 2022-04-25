@@ -16,11 +16,11 @@ ga_node::ga_node(ga_node& other)
 	_front = new ga_node(*(other._front));
 	_back = new ga_node(*(other._back));
 	for (int i = 0; i < other._polygons.size(); i++) {
-		_polygons.push_back(ga_polygon(other._polygons[i]));
+		_polygons.push_back(new ga_polygon(*other._polygons[i]));
 	}
 }
 
-ga_node::ga_node(std::vector<ga_polygon>& polys)
+ga_node::ga_node(std::vector<ga_polygon*>& polys)
 {
 	_plane = nullptr;
 	_front = nullptr;
@@ -32,7 +32,7 @@ void ga_node::invert()
 {
 	// flip all polygons
 	for (int i = 0; i < _polygons.size(); i++) {
-		_polygons[i].flip();
+		_polygons[i]->flip();
 	}
 	// also flip plane
 	_plane->flip();
@@ -59,12 +59,12 @@ void ga_node::clip_to(ga_node& bsp)
 	if (_back) _back->clip_to(bsp);
 }
 
-std::vector<ga_polygon> ga_node::clip_polygons(std::vector<ga_polygon>& polys)
+std::vector<ga_polygon*> ga_node::clip_polygons(std::vector<ga_polygon*>& polys)
 {
 	if (!_plane) 
-		return std::vector<ga_polygon>(_polygons);
-	std::vector<ga_polygon> front;
-	std::vector<ga_polygon> back;
+		return std::vector<ga_polygon*>(_polygons);
+	std::vector<ga_polygon*> front;
+	std::vector<ga_polygon*> back;
 	for (int i = 0; i < _polygons.size(); i++) {
 		split_polygon(*_plane, _polygons[i], front, back, front, back);
 	}
@@ -76,17 +76,17 @@ std::vector<ga_polygon> ga_node::clip_polygons(std::vector<ga_polygon>& polys)
 	return front;
 }
 
-std::vector<ga_polygon> ga_node::all_polygons()
+std::vector<ga_polygon*> ga_node::all_polygons()
 {
-	std::vector<ga_polygon> polygons = _polygons;
+	std::vector<ga_polygon*> polygons = _polygons;
 	if (_front) {
-		std::vector<ga_polygon> temp = _front->all_polygons();
+		std::vector<ga_polygon*> temp = _front->all_polygons();
 		if (temp.size() != 0) {
 			polygons.insert(polygons.end(), temp.begin(), temp.end());
 		}
 	}
 	if (_back) {
-		std::vector<ga_polygon> temp = _back->all_polygons();
+		std::vector<ga_polygon*> temp = _back->all_polygons();
 		if (temp.size() != 0) {
 			polygons.insert(polygons.end(), temp.begin(), temp.end());
 		}
@@ -94,12 +94,12 @@ std::vector<ga_polygon> ga_node::all_polygons()
 	return polygons;
 }
 
-void ga_node::build(std::vector<ga_polygon>& polys)
+void ga_node::build(std::vector<ga_polygon*>& polys)
 {
 	if (polys.size() == 0) return;
-	if (!_plane) _plane = new ga_csg_plane(polys[0]._plane);
-	std::vector<ga_polygon> front;
-	std::vector<ga_polygon> back;
+	if (!_plane) _plane = new ga_csg_plane(polys[0]->_plane);
+	std::vector<ga_polygon*> front;
+	std::vector<ga_polygon*> back;
 	for (int i = 0; i < polys.size(); i++) {
 		split_polygon(*_plane, polys[i], _polygons, _polygons, front, back);
 	}

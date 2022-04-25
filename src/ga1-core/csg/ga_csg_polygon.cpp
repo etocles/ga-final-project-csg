@@ -95,11 +95,11 @@ ga_polygon ga_polygon::flipped()
 
 
 void split_polygon(ga_csg_plane& plane,
-					ga_polygon& polygon,
-					std::vector<ga_polygon>& coplanar_front,
-					std::vector<ga_polygon>& coplanar_back,
-					std::vector<ga_polygon>& front,
-					std::vector<ga_polygon>& back)
+					ga_polygon* polygon,
+					std::vector<ga_polygon*>& coplanar_front,
+					std::vector<ga_polygon*>& coplanar_back,
+					std::vector<ga_polygon*>& front,
+					std::vector<ga_polygon*>& back)
 {
 	const int COPLANAR = 0;
 	const int FRONT = 1;
@@ -110,8 +110,8 @@ void split_polygon(ga_csg_plane& plane,
    // four classes.
 	int polygonType = 0;
 	std::vector<int> types;
-	for (int i = 0; i < polygon._vertices.size(); i++) {
-		int t = plane._normal.dot(polygon._vertices[i]._pos) - plane._w;
+	for (int i = 0; i < polygon->_vertices.size(); i++) {
+		int t = plane._normal.dot(polygon->_vertices[i]._pos) - plane._w;
 		int type = (t < -plane.EPSILON) ? BACK : (t > plane.EPSILON) ? FRONT : COPLANAR;
 		polygonType |= type;
 		types.push_back(type);
@@ -120,7 +120,7 @@ void split_polygon(ga_csg_plane& plane,
 	// Put the polygon in the correct list, splitting it when necessary.
 	switch (polygonType) {
 	case COPLANAR:
-		(plane._normal.dot(polygon._plane._normal) > 0 ? coplanar_front : coplanar_back).push_back(polygon);
+		(plane._normal.dot(polygon->_plane._normal) > 0 ? coplanar_front : coplanar_back).push_back(polygon);
 		break;
 	case FRONT:
 		front.push_back(polygon);
@@ -131,12 +131,12 @@ void split_polygon(ga_csg_plane& plane,
 	case SPANNING:
 		std::vector<ga_csg_vertex> f;
 		std::vector<ga_csg_vertex> b;
-		for (int i = 0; i < polygon._vertices.size(); i++) {
-			int j = (i + 1) % polygon._vertices.size();
+		for (int i = 0; i < polygon->_vertices.size(); i++) {
+			int j = (i + 1) % polygon->_vertices.size();
 			int ti = types[i];
 			int tj = types[j];
-			ga_csg_vertex vi = polygon._vertices[i];
-			ga_csg_vertex vj = polygon._vertices[j];
+			ga_csg_vertex vi = polygon->_vertices[i];
+			ga_csg_vertex vj = polygon->_vertices[j];
 			if (ti != BACK) f.push_back(vi);
 			if (ti != FRONT) b.push_back(ti != BACK ? ga_csg_vertex(vi) : vi);
 			if ((ti | tj) == SPANNING) {
@@ -146,8 +146,8 @@ void split_polygon(ga_csg_plane& plane,
 				b.push_back(ga_csg_vertex(v));
 			}
 		}
-		if (f.size() >= 3) front.push_back(ga_polygon(f, polygon._shared));
-		if (b.size() >= 3) back.push_back(ga_polygon(b, polygon._shared));
+		if (f.size() >= 3) front.push_back(new ga_polygon(f, polygon->_shared));
+		if (b.size() >= 3) back.push_back(new ga_polygon(b, polygon->_shared));
 		break;
 	}
 }

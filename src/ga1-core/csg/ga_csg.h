@@ -48,7 +48,7 @@ public:
 	/// Sets name to "Poly"
 	/// </summary>
 	/// <param name="polys"> A vector of polygons which create a mesh </param>
-	ga_csg(std::vector<ga_polygon>& polys);
+	ga_csg(std::vector<ga_polygon*>& polys);
 	~ga_csg() {
 		glDeleteVertexArrays(1, (GLuint*)&_vao);
 		glDeleteBuffers(3, _vbos);
@@ -59,15 +59,19 @@ public:
 	/// Retrieve the CSG's polygons as they appear in unit-space
 	/// </summary>
 	/// <returns> Vector of polygons of the CSG centered at the origin, without transformations or scaling applied </returns>
-	std::vector<ga_polygon> get_polygons_raw() { return _polygons; };
+	std::vector<ga_polygon*> get_polygons_raw() { 
+		std::vector<ga_polygon*> temp;
+		for (ga_polygon p : _polygons) temp.push_back(new ga_polygon(p));
+		return temp;
+	};
 
 	/// <summary>
 	/// Retrieve a certain CSG object's polygons with transformations
 	/// VERY computationally and memory intensive operation.
 	/// </summary>
 	/// <returns> Vector of polygons of the CSG with transformations and scalings applied </returns>
-	std::vector<ga_polygon> get_polygons() {
-		std::vector<ga_polygon> res;
+	std::vector<ga_polygon*> get_polygons() {
+		std::vector<ga_polygon*> res;
 		for (int i = 0; i < _polygons.size(); i++) {
 			std::vector<ga_csg_vertex> temp_verts;
 			for (int j = 0; j < _polygons[i]._vertices.size(); j++) {
@@ -77,7 +81,7 @@ public:
 				ga_vec3f new_pos = { temp.x, temp.y, temp.z };
 				temp_verts.push_back(ga_csg_vertex(new_pos, _polygons[i]._vertices[j]._normal));
 			}
-			res.push_back(ga_polygon(temp_verts));
+			res.push_back(new ga_polygon(temp_verts));
 		}
 		return res;
 	}

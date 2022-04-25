@@ -49,10 +49,10 @@ public:
 };
 
 void split_polygon(ga_csg_plane& plane,
-					ga_polygon& polygon,
-					std::vector<ga_polygon>& coplanar_front,
-					std::vector<ga_polygon>& coplanar_back,
-					std::vector<ga_polygon>& front,
-					std::vector<ga_polygon>& back);
+					ga_polygon* polygon,
+					std::vector<ga_polygon*>& coplanar_front,
+					std::vector<ga_polygon*>& coplanar_back,
+					std::vector<ga_polygon*>& front,
+					std::vector<ga_polygon*>& back);
 
 #endif

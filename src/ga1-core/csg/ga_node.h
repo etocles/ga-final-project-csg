@@ -31,22 +31,22 @@ public:
 		_back = nullptr;
 	}
 	ga_node(ga_node& other);
-	ga_node(std::vector<ga_polygon>& polys);
+	ga_node(std::vector<ga_polygon*>& polys);
 	~ga_node() { }
 
 	void invert();
 	ga_node inverted();
 
 	void clip_to(ga_node& bsp);
-	std::vector<ga_polygon> clip_polygons(std::vector<ga_polygon>& polys);
-	std::vector<ga_polygon> all_polygons();
+	std::vector<ga_polygon*> clip_polygons(std::vector<ga_polygon*>& polys);
+	std::vector<ga_polygon*> all_polygons();
 
-	void build(std::vector<ga_polygon>& polys);
+	void build(std::vector<ga_polygon*>& polys);
 
 	ga_csg_plane* _plane;
 	ga_node* _front;
 	ga_node* _back;
-	std::vector<ga_polygon> _polygons;
+	std::vector<ga_polygon*> _polygons;
 };
 
 #endif

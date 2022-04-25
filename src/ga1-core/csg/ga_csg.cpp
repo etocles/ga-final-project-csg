@@ -55,8 +55,8 @@ ga_csg::ga_csg(ga_csg& other) {
     name = other.name;
 }
 
-ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
-    _polygons = polys;
+ga_csg::ga_csg(std::vector<ga_polygon*>& polys) {
+    for (ga_polygon* p : polys) _polygons.push_back(*p);
     default_values();
     _vao = make_vao();
     name = "Poly";
@@ -82,8 +82,8 @@ ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
   // 
 ga_csg ga_csg::add(ga_csg& other)
 {
-    std::vector<ga_polygon> own_adjusted_polys = get_polygons();
-    std::vector<ga_polygon> other_adjusted_polys = other.get_polygons();
+    std::vector<ga_polygon*> own_adjusted_polys = get_polygons();
+    std::vector<ga_polygon*> other_adjusted_polys = other.get_polygons();
     ga_node a = ga_node(own_adjusted_polys);
     ga_node b = ga_node(other_adjusted_polys);
     a.clip_to(ga_node(own_adjusted_polys));
@@ -116,12 +116,12 @@ ga_csg ga_csg::add(ga_csg& other)
 ga_csg ga_csg::subtract(ga_csg& other)
 {
     // TODO: NEEDS DEBUGGING
-    std::vector<ga_polygon> own_adjusted_polys = get_polygons();
-    std::vector<ga_polygon> other_adjusted_polys = other.get_polygons();
+    std::vector<ga_polygon*> own_adjusted_polys = get_polygons();
+    std::vector<ga_polygon*> other_adjusted_polys = other.get_polygons();
     ga_node a = ga_node(own_adjusted_polys);
     ga_node b = ga_node(other_adjusted_polys);
-    a.clip_to(ga_node(other_adjusted_polys));
-    b.clip_to(ga_node(own_adjusted_polys));
+    a.clip_to(b);
+    b.clip_to(a);
     a.invert();
     a.clip_to(b);
     b.clip_to(a);
@@ -153,8 +153,8 @@ ga_csg ga_csg::subtract(ga_csg& other)
 ga_csg ga_csg::intersect(ga_csg& other){
     // TODO: NEEDS DEBUGGING
 
-    std::vector<ga_polygon> own_adjusted_polys = get_polygons();
-    std::vector<ga_polygon> other_adjusted_polys = other.get_polygons();
+    std::vector<ga_polygon*> own_adjusted_polys = get_polygons();
+    std::vector<ga_polygon*> other_adjusted_polys = other.get_polygons();
     ga_node a = ga_node(own_adjusted_polys);
     ga_node b = ga_node(other_adjusted_polys);
     a.invert();
@@ -212,7 +212,7 @@ uint32_t ga_csg::make_vao()
 // Creates a unit cube, centered at the origin.
 ga_csg ga_csg::Cube() {
     // what the csg will be made with
-    std::vector<ga_polygon> polys;
+    std::vector<ga_polygon*> polys;
     std::vector<ga_vec3f> vertices = {
         // Front
         {-0.5, -0.5,  0.5},
@@ -259,7 +259,7 @@ ga_csg ga_csg::Cube() {
         for (int j = 0; j < 4; j++) {
             vs.push_back(ga_csg_vertex(vertices[i+j], norms[i/4]));
         }
-        polys.push_back(ga_polygon(vs));
+        polys.push_back(new ga_polygon(vs));
     }
 
     ga_csg temp = ga_csg(polys);
@@ -268,7 +268,7 @@ ga_csg ga_csg::Cube() {
 // Creates a unit pyramid, centered at the origin.
 ga_csg ga_csg::Pyramid() {
     // what the csg will be made with
-    std::vector<ga_polygon> polys;
+    std::vector<ga_polygon*> polys;
     std::vector<std::vector<ga_vec3f>> vertgroups = {
         // Bottom
         std::vector<ga_vec3f>({
@@ -316,7 +316,7 @@ ga_csg ga_csg::Pyramid() {
         for (int j = 0; j < vertgroups[i].size(); j++) {
             vs.push_back(ga_csg_vertex(vertgroups[i][j], norms[i]));
         }
-        polys.push_back(ga_polygon(vs));
+        polys.push_back(new ga_polygon(vs));
     }
 
     ga_csg temp = ga_csg(polys);
@@ -326,7 +326,7 @@ ga_csg ga_csg::Pyramid() {
 // TODO: Implement, rn still makes a cube
 ga_csg ga_csg::Sphere() {
     // what the csg will be made with
-    std::vector<ga_polygon> polys;
+    std::vector<ga_polygon*> polys;
 
     std::vector<ga_vec3f> vertices = {
         // Front
@@ -375,7 +375,7 @@ ga_csg ga_csg::Sphere() {
         for (int j = 0; j < 4; j++) {
             vs.push_back(ga_csg_vertex(vertices[i + j], norms[i / 4]));
         }
-        polys.push_back(ga_polygon(vs));
+        polys.push_back(new ga_polygon(vs));
     }
 
     ga_csg temp = ga_csg(polys);
