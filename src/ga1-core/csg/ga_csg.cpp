@@ -52,12 +52,14 @@ ga_csg::ga_csg(ga_csg& other) {
     _color = other._color;
     _material->set_color(_color);
     _vao = make_vao();
+    name = other.name;
 }
 
 ga_csg::ga_csg(std::vector<ga_polygon>& polys) {
     _polygons = polys;
     default_values();
     _vao = make_vao();
+    name = "Poly";
 }
 
 #pragma endregion
