@@ -327,56 +327,32 @@ ga_csg ga_csg::Pyramid() {
 ga_csg ga_csg::Sphere() {
     // what the csg will be made with
     std::vector<ga_polygon> polys;
+    std::vector<ga_csg_vertex> verts;
+    int slices = 16;
+    int stacks = 8;
 
-    std::vector<ga_vec3f> vertices = {
-        // Front
-        {-0.5, -0.5,  0.5},
-        { 0.5, -0.5,  0.5},
-        { 0.5,  0.5,  0.5},
-        {-0.5,  0.5,  0.5},
-        // Top
-        {-0.5,  0.5,  0.5},
-        { 0.5,  0.5,  0.5},
-        { 0.5,  0.5, -0.5},
-        {-0.5,  0.5, -0.5},
-        // Back
-        { 0.5, -0.5, -0.5},
-        {-0.5, -0.5, -0.5},
-        {-0.5,  0.5, -0.5},
-        { 0.5,  0.5, -0.5},
-        // Bottom
-       { -0.5, -0.5, -0.5},
-       {  0.5, -0.5, -0.5},
-       {  0.5, -0.5,  0.5},
-       { -0.5, -0.5,  0.5},
-       // Left
-      { -0.5, -0.5, -0.5},
-      { -0.5, -0.5,  0.5},
-      { -0.5,  0.5,  0.5},
-      { -0.5,  0.5, -0.5},
-      // Right
-     {  0.5, -0.5,  0.5},
-     {  0.5, -0.5, -0.5},
-     {  0.5,  0.5, -0.5},
-     {  0.5,  0.5,  0.5},
+    auto vertex = [&](float theta, float phi) {
+        theta *= GA_PI * 2;
+        phi *= GA_PI;
+        ga_vec3f dir = {
+           cos(theta) * sin(phi),
+           cos(phi),
+           sin(theta) * sin(phi)
+        };
+        verts.push_back(ga_csg_vertex(dir, dir));
     };
 
-    std::vector<ga_vec3f> norms = {
-        {0, 0, +1}, // Front
-        {0, -1, 0}, // Top
-        {0, 0, -1}, // Back
-        {0, -1, 0}, // Bottom
-        {-1, 0, 0}, // Left
-        {+1, 0, 0}  // Right
-    };
-
-    for (int i = 0; i < vertices.size(); i += 4) {
-        std::vector<ga_csg_vertex> vs;
-        for (int j = 0; j < 4; j++) {
-            vs.push_back(ga_csg_vertex(vertices[i + j], norms[i / 4]));
+    for (int i = 0; i < slices; i++) {
+        for (int j = 0; j < stacks; j++) {
+            verts.clear();
+            vertex(i / slices, j / stacks);
+            if (j > 0) vertex((i + 1) / slices, j / stacks);
+            if (j < stacks - 1) vertex((i + 1) / slices, (j + 1) / stacks);
+            vertex(i / slices, (j + 1) / stacks);
+            polys.push_back(ga_polygon(verts));
         }
-        polys.push_back(ga_polygon(vs));
     }
+  
 
     ga_csg temp = ga_csg(polys);
     return temp;
